@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Olá, {{ user.name.split(" ")[0] }} 👋</div>
+<p class="page-subtitle">Seu Objetivo Maior: <strong style="color: var(--neon)">{{ user.objetivo_maior or "ainda não definido" }}</strong></p>
+
+{% if pending_challenges %}
+<div class="disclaimer">
+  <strong>Sem problema, dá pra recuperar:</strong>
+  {% for c in pending_challenges %}
+  você está com {{ pace_by_challenge[c.id].days_behind }} dia(s) para colocar em dia no desafio
+  <a href="/challenges/{{ c.id }}">{{ c.plan_key }}</a>{{ "." if loop.last else "; " }}
+  {% endfor %}
+  Marque quando puder — os dias não têm prazo nem penalidade.
+</div>
+{% endif %}
+
+<div class="grid grid-3">
+  <div class="card metric">
+    <div class="value">{{ user.level }}</div>
+    <div class="label">Nível atual</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ user.xp }}</div>
+    <div class="label">XP total</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ streak }}</div>
+    <div class="label">Maior sequência de dias</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="page-subtitle" style="margin-bottom: 8px">Progresso até o próximo nível</div>
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: {{ 100 - xp_to_next_level }}%"></div>
+  </div>
+  <p class="page-subtitle" style="margin-top: 8px; margin-bottom: 0">
+    Faltam {{ xp_to_next_level }} XP para o nível {{ user.level + 1 }}
+  </p>
+</div>
+
+<div class="card">
+  <div class="page-title" style="font-size: 1.2rem">Conquistas</div>
+  <div class="badge-list">
+    {% for badge in badges %}
+    <div class="badge {{ 'unlocked' if badge.unlocked else '' }}">
+      <div class="badge-name">{{ badge.name }}</div>
+      <div class="badge-desc">{{ badge.description }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="page-title" style="font-size: 1.2rem">Seus desafios de poupança</div>
+  {% if challenges %}
+  {% for c in challenges %}
+  <div class="list-item">
+    <div>
+      <strong>{{ c.plan_key }}</strong> — {{ c.total_days }} dias
+      {% if pace_by_challenge[c.id].is_completed %}
+      <span class="tag">Concluído</span>
+      {% elif pace_by_challenge[c.id].days_behind > 0 %}
+      <span class="tag" style="background: rgba(255, 92, 92, 0.15); color: var(--danger)">
+        {{ pace_by_challenge[c.id].days_behind }} dia(s) a recuperar
+      </span>
+      {% elif not pace_by_challenge[c.id].marked_today %}
+      <span class="tag">Ainda não marcou hoje</span>
+      {% else %}
+      <span class="tag">Em dia</span>
+      {% endif %}
+    </div>
+    <a class="btn btn-small" href="/challenges/{{ c.id }}">Ver tabuleiro</a>
+  </div>
+  {% endfor %}
+  {% else %}
+  <p class="page-subtitle">Você ainda não iniciou nenhum desafio.</p>
+  {% endif %}
+  <a class="btn" href="/challenges">Ir para Desafios</a>
+</div>
+{% endblock %}

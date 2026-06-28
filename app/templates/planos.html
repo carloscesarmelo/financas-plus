@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Planos · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Planos FINANÇAS+</div>
+
+{% if user and user.plan_active %}
+<div class="disclaimer">
+  <strong>Você já é assinante do plano {{ plan_label }}.</strong>
+  Aproveite os Desafios de Poupança, o Aprender e as Dicas de Renda Extra.
+</div>
+{% else %}
+<p class="page-subtitle">
+  O Diagnóstico é gratuito. Os Desafios de Poupança, o conteúdo do Aprender e as Dicas de Renda Extra
+  ficam liberados para assinantes.
+</p>
+{% endif %}
+
+<div class="card">
+  <div class="pricing-grid">
+    <div class="pricing-card">
+      <div class="tag">Flexível</div>
+      <div class="sim-name">Mensal</div>
+      <div class="price-value">R$ 29,90<span class="price-period">/mês</span></div>
+      <p class="sim-sub">Cancele quando quiser.</p>
+      {% if checkout_urls.mensal %}
+      <a class="btn btn-secondary" href="{{ checkout_urls.mensal }}">Assinar Mensal</a>
+      {% else %}
+      <button class="btn btn-secondary" disabled>Em breve</button>
+      {% endif %}
+    </div>
+    <div class="pricing-card featured">
+      <div class="tag">Mais escolhido</div>
+      <div class="sim-name">Anual</div>
+      <div class="price-value">R$ 197<span class="price-period">/ano</span></div>
+      <p class="sim-sub">Equivale a R$ 16,40/mês — 45% mais barato que o plano mensal.</p>
+      {% if checkout_urls.anual %}
+      <a class="btn" href="{{ checkout_urls.anual }}">Assinar Anual</a>
+      {% else %}
+      <button class="btn" disabled>Em breve</button>
+      {% endif %}
+    </div>
+    <div class="pricing-card">
+      <div class="tag">Só no lançamento</div>
+      <div class="sim-name">Vitalício</div>
+      <div class="price-value">R$ 397<span class="price-period">único</span></div>
+      <p class="sim-sub">Acesso para sempre. Vagas limitadas nesta turma.</p>
+      {% if checkout_urls.vitalicio %}
+      <a class="btn btn-secondary" href="{{ checkout_urls.vitalicio }}">Garantir vitalício</a>
+      {% else %}
+      <button class="btn btn-secondary" disabled>Em breve</button>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<p class="page-subtitle center-text">
+  Já comprou e seu acesso não foi liberado? Aguarde alguns minutos ou entre em contato com o suporte.
+</p>
+{% endblock %}

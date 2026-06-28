@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}FINANÇAS+{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  {% if user %}
+  <nav class="navbar">
+    <div class="brand">FINANÇAS<span>+</span></div>
+    <div class="nav-links">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/diagnostico/resultado">Diagnóstico</a>
+      <a href="/challenges">Desafios</a>
+      <a href="/learn">Aprender</a>
+      <a href="/tips">Renda Extra</a>
+      <a href="/planos">Planos</a>
+      <span class="nav-pill">Nível {{ user.level }} · {{ user.xp }} XP</span>
+      {% if not user.plan_active %}
+      <a href="/planos" class="nav-pill nav-pill-free">Free</a>
+      {% endif %}
+      <a href="/logout">Sair</a>
+    </div>
+  </nav>
+  {% endif %}
+
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

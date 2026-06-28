@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Diagnóstico Financeiro · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">{{ "Refazer o Diagnóstico Financeiro" if is_retake else "Diagnóstico Financeiro" }}</div>
+<p class="page-subtitle">
+  Responda as 8 perguntas com sinceridade. No final você verá sua Saúde Financeira detalhada por área de conhecimento.
+</p>
+
+<form method="post" action="/diagnostico">
+  {% for area in areas %}
+  {% set area_number = loop.index %}
+  <div class="card">
+    <div class="tag">Área {{ area_number }} de {{ areas|length }} · {{ area.title }}</div>
+    <p class="page-subtitle quiz-question">{{ area.question }}</p>
+
+    {% for option in area.options %}
+    <label class="quiz-option" for="{{ area.key }}_{{ option.value }}">
+      <input
+        type="radio"
+        id="{{ area.key }}_{{ option.value }}"
+        name="area_{{ area_number }}"
+        value="{{ option.value }}"
+        required
+      />
+      <span>{{ option.label }}</span>
+    </label>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+  <button class="btn" type="submit">Concluir diagnóstico</button>
+</form>
+{% endblock %}

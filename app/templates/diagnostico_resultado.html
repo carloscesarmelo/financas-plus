@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Sua Saúde Financeira · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Sua Saúde Financeira</div>
+<p class="page-subtitle">
+  Diagnóstico realizado em {{ atual.data_diagnostico.strftime("%d/%m/%Y") }}.
+  {% if anterior %} Comparando com o diagnóstico de {{ anterior.data_diagnostico.strftime("%d/%m/%Y") }}.{% endif %}
+</p>
+
+<div class="card center-text">
+  <div class="gauge" style="background: conic-gradient(var(--neon) {{ atual.percentual_geral }}%, var(--bg-elevated) 0)">
+    <div class="gauge-inner">
+      <div class="gauge-value">{{ atual.percentual_geral | round(1) }}%</div>
+      <div class="gauge-label">Saúde Financeira</div>
+    </div>
+  </div>
+  <p class="page-subtitle" style="margin-top: 16px; margin-bottom: 0;">
+    {{ atual.pontuacao_total }} de 24 pontos possíveis
+  </p>
+</div>
+
+{% if lock.locked %}
+<div class="disclaimer locked-card">
+  🔒 Próximo diagnóstico disponível em {{ lock.days_remaining }} dia{{ "s" if lock.days_remaining != 1 else "" }}.
+</div>
+{% else %}
+<a class="btn btn-secondary" href="/diagnostico">Refazer diagnóstico</a>
+{% endif %}
+
+<div class="card">
+  <div class="page-title" style="font-size: 1.2rem">Detalhamento por área</div>
+  <div class="sim-bars">
+    {% for area in areas_resultado %}
+    <div>
+      <div class="sim-head">
+        <span class="sim-name">{{ area.title }}</span>
+        <span class="sim-value">{{ area.valor }}/3</span>
+      </div>
+      <div class="sim-track">
+        <div class="sim-fill" style="width: {{ (area.valor / 3) * 100 }}%"></div>
+      </div>
+      <p class="sim-sub">{{ area.feedback }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% if anterior %}
+<div class="card">
+  <div class="page-title" style="font-size: 1.2rem">Evolução em relação ao diagnóstico anterior</div>
+  <div class="compare-bars">
+    {% for area in areas_resultado %}
+    <div class="compare-row">
+      <div class="compare-name">{{ area.title }}</div>
+      <div class="compare-track-group">
+        <div class="compare-track">
+          <div class="compare-fill compare-fill-previous" style="width: {{ (area.valor_anterior / 3) * 100 }}%"></div>
+        </div>
+        <div class="compare-track">
+          <div class="compare-fill compare-fill-current" style="width: {{ (area.valor / 3) * 100 }}%"></div>
+        </div>
+      </div>
+      <div class="compare-delta {{ 'compare-up' if area.valor > area.valor_anterior else ('compare-down' if area.valor < area.valor_anterior else '') }}">
+        {{ "+" if area.valor > area.valor_anterior else "" }}{{ area.valor - area.valor_anterior }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <p class="sim-sub" style="margin-top: 12px;">
+    <span class="compare-legend-dot compare-fill-previous"></span> Anterior
+    &nbsp;&nbsp;
+    <span class="compare-legend-dot compare-fill-current"></span> Atual
+  </p>
+</div>
+{% endif %}
+{% endblock %}

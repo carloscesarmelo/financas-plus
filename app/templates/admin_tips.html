@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Admin · Dicas · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Adicionar dica de renda extra</div>
+
+<div class="card">
+  <form method="post" action="/admin/tips">
+    <label for="title">Título</label>
+    <input type="text" id="title" name="title" required />
+
+    <label for="category">Categoria</label>
+    <input type="text" id="category" name="category" placeholder="Ex: Renda imediata" required />
+
+    <label for="description">Descrição</label>
+    <textarea id="description" name="description" rows="4" required></textarea>
+
+    <button class="btn" type="submit">Salvar dica</button>
+  </form>
+</div>
+{% endblock %}

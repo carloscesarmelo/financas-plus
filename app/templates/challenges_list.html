@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Desafios de Poupança · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Desafios de Poupança</div>
+<p class="page-subtitle">
+  Escolha um plano atrelado ao seu Objetivo Maior:
+  <strong style="color: var(--neon)">{{ user.objetivo_maior or "defina um objetivo no onboarding" }}</strong>
+</p>
+
+<div class="card">
+  <form method="post" action="/challenges" id="challenge-form">
+    <div class="plan-options">
+      {% for key, label in plan_labels.items() %}
+      <div class="plan-option">
+        <input type="radio" name="plan_key" id="plan_{{ key }}" value="{{ key }}" required />
+        <label for="plan_{{ key }}">
+          {{ label }}
+          {% if key in plan_days %}
+          <div class="page-subtitle" style="margin: 4px 0 0">{{ plan_days[key] }} dias</div>
+          {% endif %}
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div id="custom-days-wrapper" style="display: none">
+      <label for="custom_days">Quantos dias você quer no seu desafio personalizado?</label>
+      <input type="number" min="2" id="custom_days" name="custom_days" />
+    </div>
+
+    <button class="btn" type="submit">Começar novo desafio</button>
+  </form>
+</div>
+
+<div class="card">
+  <div class="page-title" style="font-size: 1.2rem">Histórico de desafios</div>
+  {% if challenges %}
+  {% for c in challenges %}
+  <div class="list-item">
+    <div>
+      <strong>{{ plan_labels.get(c.plan_key, c.plan_key) }}</strong> — {{ c.total_days }} dias
+      {% if pace_by_challenge[c.id].is_completed %}
+      <span class="tag">Concluído</span>
+      {% elif pace_by_challenge[c.id].days_behind > 0 %}
+      <span class="tag" style="background: rgba(255, 92, 92, 0.15); color: var(--danger)">
+        {{ pace_by_challenge[c.id].days_behind }} dia(s) a recuperar
+      </span>
+      {% endif %}
+      <div class="page-subtitle" style="margin: 0">Objetivo: {{ c.objetivo_maior or "—" }}</div>
+    </div>
+    <a class="btn btn-small" href="/challenges/{{ c.id }}">Abrir tabuleiro</a>
+  </div>
+  {% endfor %}
+  {% else %}
+  <p class="page-subtitle">Nenhum desafio criado ainda.</p>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const customWrapper = document.getElementById("custom-days-wrapper");
+  const customInput = document.getElementById("custom_days");
+  document.querySelectorAll('input[name="plan_key"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      const isCustom = radio.value === "custom" && radio.checked;
+      if (radio.checked) {
+        customWrapper.style.display = radio.value === "custom" ? "block" : "none";
+        customInput.required = radio.value === "custom";
+      }
+    });
+  });
+</script>
+{% endblock %}

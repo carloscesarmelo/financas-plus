@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Admin · Aprender · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Adicionar conteúdo de aprendizado</div>
+
+<div class="card">
+  <form method="post" action="/admin/learn">
+    <label for="title">Título</label>
+    <input type="text" id="title" name="title" required />
+
+    <label for="url">Link</label>
+    <input type="url" id="url" name="url" required />
+
+    <label for="content_type">Tipo</label>
+    <select id="content_type" name="content_type" required>
+      <option value="video">Vídeo</option>
+      <option value="artigo">Artigo</option>
+      <option value="podcast">Podcast</option>
+    </select>
+
+    <label for="level">Nível</label>
+    <select id="level" name="level" required>
+      {% for key, label in level_labels.items() %}
+      <option value="{{ key }}">{{ label }}</option>
+      {% endfor %}
+    </select>
+
+    <button class="btn" type="submit">Salvar conteúdo</button>
+  </form>
+</div>
+{% endblock %}

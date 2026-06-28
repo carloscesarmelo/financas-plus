@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}{{ plan_label }} · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">{{ plan_label }}</div>
+<p class="page-subtitle">Objetivo: <strong style="color: var(--neon)">{{ challenge.objetivo_maior or "—" }}</strong></p>
+
+<div class="disclaimer">
+  <strong>Importante:</strong> os valores marcados aqui devem ser depositados/transferidos na vida real
+  para uma conta exclusiva e reservada para este fim. O tabuleiro é apenas o seu registro visual de progresso.
+</div>
+
+{% if not pace.is_completed and pace.days_behind > 0 %}
+<div class="disclaimer">
+  <strong>Você está com {{ pace.days_behind }} dia(s) para colocar em dia.</strong>
+  Sem problema — não existe prazo nem penalidade. Marque os blocos que faltam quando puder; o
+  rendimento de cada depósito só passa a contar a partir do momento em que você marcá-lo.
+</div>
+{% elif not pace.is_completed and not pace.marked_today %}
+<div class="disclaimer">
+  Você ainda não guardou hoje. Quando puder, clique no próximo bloco do tabuleiro.
+</div>
+{% endif %}
+
+<div class="grid grid-2">
+  <div class="card metric card-glow">
+    <div class="value value-xl" id="metric-principal">R$ {{ "%.2f"|format(accrued.principal) }}</div>
+    <div class="label">Principal depositado</div>
+  </div>
+  <div class="card metric card-glow">
+    <div class="value value-xl" id="metric-interest">R$ {{ "%.2f"|format(accrued.interest) }}</div>
+    <div class="label">Juros acumulados (projeção)</div>
+  </div>
+</div>
+
+<div class="grid grid-3">
+  <div class="card metric">
+    <div class="value" id="metric-saved">R$ {{ "%.2f"|format(total_saved) }}</div>
+    <div class="label">Guardado até agora</div>
+  </div>
+  <div class="card metric">
+    <div class="value" id="metric-remaining">R$ {{ "%.2f"|format(remaining) }}</div>
+    <div class="label">Falta para completar</div>
+  </div>
+  <div class="card metric">
+    <div class="value" id="metric-balance">R$ {{ "%.2f"|format(accrued.balance) }}</div>
+    <div class="label">Saldo total hoje (com juros)</div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="page-title" style="font-size: 1.2rem">Simulação estratégica — o poder de antecipar o capital</div>
+  <p class="page-subtitle">
+    Os três cenários abaixo guardam exatamente o mesmo total ao longo de {{ scenarios.total_days }} dias
+    (R$ {{ "%.2f"|format(scenarios.principal) }}). A diferença no rendimento final vem apenas da
+    <strong>ordem</strong> dos depósitos, a uma taxa de 1% a.m. (0,03333% a.d.) com juros em D+1.
+  </p>
+
+  {% set max_fv = scenarios.decrescente.future_value %}
+  <div class="sim-bars">
+    <div class="sim-row">
+      <div class="sim-head">
+        <span class="sim-name">Decrescente <span class="tag">mais eficiente</span></span>
+        <span class="sim-value">R$ {{ "%.2f"|format(scenarios.decrescente.future_value) }}</span>
+      </div>
+      <div class="sim-track">
+        <div class="sim-fill" style="width: {{ (scenarios.decrescente.future_value / max_fv * 100) }}%"></div>
+      </div>
+      <div class="sim-sub">Começa no valor máximo e cai R$ 1,00/dia · juros: R$ {{ "%.2f"|format(scenarios.decrescente.interest) }}</div>
+    </div>
+
+    <div class="sim-row">
+      <div class="sim-head">
+        <span class="sim-name">Intermediária <span class="tag">prática real</span></span>
+        <span class="sim-value">R$ {{ "%.2f"|format(scenarios.intermediario.future_value) }}</span>
+      </div>
+      <div class="sim-track">
+        <div class="sim-fill" style="width: {{ (scenarios.intermediario.future_value / max_fv * 100) }}%"></div>
+      </div>
+      <div class="sim-sub">Depósito constante na média ({{ "%.2f"|format(scenarios.principal / scenarios.total_days) }}/dia) · juros: R$ {{ "%.2f"|format(scenarios.intermediario.interest) }}</div>
+    </div>
+
+    <div class="sim-row">
+      <div class="sim-head">
+        <span class="sim-name">Crescente <span class="tag">menos eficiente</span></span>
+        <span class="sim-value">R$ {{ "%.2f"|format(scenarios.crescente.future_value) }}</span>
+      </div>
+      <div class="sim-track">
+        <div class="sim-fill" style="width: {{ (scenarios.crescente.future_value / max_fv * 100) }}%"></div>
+      </div>
+      <div class="sim-sub">Começa em R$ 1,00 e sobe R$ 1,00/dia · juros: R$ {{ "%.2f"|format(scenarios.crescente.interest) }}</div>
+    </div>
+  </div>
+
+  <p class="page-subtitle" style="margin-top: 20px; margin-bottom: 0">
+    O cenário intermediário representa a <strong>expectativa matemática</strong> de uma escolha aleatória.
+    Na prática, como você escolherá os valores de forma sortida conforme seu fluxo de caixa diário, seu
+    rendimento final tende a se aproximar desse cenário.
+  </p>
+</div>
+
+<div class="card card-glow">
+  <div class="page-title" style="font-size: 1.2rem">Seu tabuleiro</div>
+  <p class="page-subtitle">Clique em cada bloco no dia em que você guardar o valor correspondente.</p>
+  <div class="board" id="board" data-challenge-id="{{ challenge.id }}">
+    {% for day in challenge.days %}
+    <div class="board-day {{ 'marked' if day.marked else '' }}" data-day="{{ day.day_number }}" data-amount="{{ day.amount }}">
+      <div class="day-number">{{ day.day_number }}</div>
+      <div class="day-amount">R$ {{ "%.0f"|format(day.amount) }}</div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/board.js"></script>
+{% endblock %}

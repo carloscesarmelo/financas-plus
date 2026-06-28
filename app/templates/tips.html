@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Renda Extra · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Dicas de Como Fazer Dinheiro</div>
+<p class="page-subtitle">Roteiros práticos para gerar renda extra além do que você já faz.</p>
+
+{% if user.is_admin %}
+<a class="btn btn-secondary" href="/admin/tips">+ Adicionar dica (admin)</a>
+{% endif %}
+
+<div class="grid grid-2">
+  {% for tip in tips %}
+  <div class="card">
+    <span class="tag">{{ tip.category }}</span>
+    <div class="page-title" style="font-size: 1.1rem">{{ tip.title }}</div>
+    <p class="page-subtitle">{{ tip.description }}</p>
+    {% if tip.id in completed_ids %}
+    <span class="nav-pill">Concluído</span>
+    {% else %}
+    <form method="post" action="/tips/{{ tip.id }}/complete">
+      <button class="btn btn-small" type="submit">Marcar como concluído</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

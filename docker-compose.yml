@@ -1,0 +1,13 @@
+services:
+  financas-plus:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/code/data
+    environment:
+      - DATABASE_URL=sqlite:////code/data/financas.db
+      - SECRET_KEY=${SECRET_KEY:?defina SECRET_KEY no arquivo .env}
+      - KIWIFY_WEBHOOK_TOKEN=${KIWIFY_WEBHOOK_TOKEN:-}
+      - KIWIFY_PLAN_MAP=${KIWIFY_PLAN_MAP:-{}}
+    restart: unless-stopped

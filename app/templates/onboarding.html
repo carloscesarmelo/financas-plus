@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Diagnóstico financeiro · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Vamos te conhecer melhor</div>
+<p class="page-subtitle">
+  Responda com sinceridade. Isso ajuda a sugerir o melhor caminho dentro da plataforma.
+</p>
+
+<div class="card">
+  <form method="post" action="/onboarding">
+    <label for="renda_atual">Qual sua renda mensal atual aproximada (R$)?</label>
+    <input type="number" step="0.01" min="0" id="renda_atual" name="renda_atual" required />
+
+    <label for="possui_dividas">Você possui dívidas em aberto hoje?</label>
+    <select id="possui_dividas" name="possui_dividas" required>
+      <option value="nao">Não</option>
+      <option value="sim">Sim</option>
+    </select>
+
+    <label for="valor_dividas">Se sim, qual o valor aproximado das dívidas (R$)?</label>
+    <input type="number" step="0.01" min="0" id="valor_dividas" name="valor_dividas" value="0" />
+
+    <label for="comportamento">Como você descreveria seu comportamento com dinheiro?</label>
+    <select id="comportamento" name="comportamento" required>
+      <option value="disciplinado">Disciplinado — já controlo bem meus gastos</option>
+      <option value="organizado">Organizado, mas quero evoluir</option>
+      <option value="impulsivo">Impulsivo — costumo gastar sem planejar</option>
+      <option value="iniciante">Iniciante — nunca organizei minhas finanças</option>
+    </select>
+
+    <label for="habilidades">Quais habilidades ou conhecimentos você já tem hoje?</label>
+    <textarea id="habilidades" name="habilidades" rows="3" placeholder="Ex: design, vendas, culinária, aulas particulares..."></textarea>
+
+    <label for="objetivo_maior">Qual é o seu Objetivo Maior agora?</label>
+    <input
+      type="text"
+      id="objetivo_maior"
+      name="objetivo_maior"
+      placeholder="Ex: Comprar um celular novo, dar entrada em um apartamento, reserva de emergência..."
+      required
+    />
+
+    <button class="btn" type="submit">Concluir diagnóstico</button>
+  </form>
+</div>
+{% endblock %}

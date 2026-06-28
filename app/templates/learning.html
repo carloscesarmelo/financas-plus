@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Aprender · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Aprender sobre Finanças</div>
+<p class="page-subtitle">Conteúdo selecionado, organizado por nível de conhecimento.</p>
+
+{% if user.is_admin %}
+<a class="btn btn-secondary" href="/admin/learn">+ Adicionar conteúdo (admin)</a>
+{% endif %}
+
+{% for level, contents in by_level.items() %}
+<div class="card">
+  <div class="page-title" style="font-size: 1.2rem">{{ level_labels.get(level, level) }}</div>
+  {% if contents %}
+  {% for content in contents %}
+  <div class="list-item">
+    <div>
+      <span class="tag">{{ content.content_type }}</span>
+      <div><a href="{{ content.url }}" target="_blank" rel="noopener">{{ content.title }}</a></div>
+    </div>
+    {% if content.id in completed_ids %}
+    <span class="nav-pill">Concluído</span>
+    {% else %}
+    <form method="post" action="/learn/{{ content.id }}/complete">
+      <button class="btn btn-small" type="submit">Marcar como concluído</button>
+    </form>
+    {% endif %}
+  </div>
+  {% endfor %}
+  {% else %}
+  <p class="page-subtitle">Nenhum conteúdo cadastrado neste nível ainda.</p>
+  {% endif %}
+</div>
+{% endfor %}
+{% endblock %}
