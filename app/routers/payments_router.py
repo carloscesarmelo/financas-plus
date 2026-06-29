@@ -26,6 +26,12 @@ async def kiwify_webhook(request: Request, token: str | None = None, db: Session
     return {"received": True, "processed": event.processed}
 
 
+@router.get("/webhooks/kiwify/env-keys")
+def kiwify_env_keys():
+    """Endpoint temporário: lista os NOMES das variáveis de ambiente vistas pelo processo (sem valores)."""
+    return sorted(os.environ.keys())
+
+
 @router.get("/webhooks/kiwify/diag")
 def kiwify_webhook_diag(token: str | None = None):
     """Endpoint temporário só para comparar o token recebido com o configurado, sem expor nenhum dos dois por completo."""
