@@ -11,8 +11,8 @@ router = APIRouter()
 
 
 def _check_token(token: str | None):
-    expected_token = os.environ.get("KIWIFY_WEBHOOK_TOKEN")
-    if not expected_token or token != expected_token:
+    expected_token = (os.environ.get("KIWIFY_WEBHOOK_TOKEN") or "").strip()
+    if not expected_token or (token or "").strip() != expected_token:
         raise HTTPException(status_code=401, detail="Token inválido")
 
 
