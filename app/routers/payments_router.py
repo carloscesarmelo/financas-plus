@@ -29,7 +29,13 @@ async def kiwify_webhook(request: Request, token: str | None = None, db: Session
 @router.get("/webhooks/kiwify/env-keys")
 def kiwify_env_keys():
     """Endpoint temporário: lista os NOMES das variáveis de ambiente vistas pelo processo (sem valores)."""
-    return sorted(os.environ.keys())
+    return {
+        "keys": sorted(os.environ.keys()),
+        "railway_environment_name": os.environ.get("RAILWAY_ENVIRONMENT_NAME"),
+        "railway_service_name": os.environ.get("RAILWAY_SERVICE_NAME"),
+        "railway_deployment_id": os.environ.get("RAILWAY_DEPLOYMENT_ID"),
+        "railway_git_commit_sha": os.environ.get("RAILWAY_GIT_COMMIT_SHA"),
+    }
 
 
 @router.get("/webhooks/kiwify/diag")
