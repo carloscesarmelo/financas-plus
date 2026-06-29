@@ -26,6 +26,21 @@ async def kiwify_webhook(request: Request, token: str | None = None, db: Session
     return {"received": True, "processed": event.processed}
 
 
+@router.get("/webhooks/kiwify/diag")
+def kiwify_webhook_diag(token: str | None = None):
+    """Endpoint temporário só para comparar o token recebido com o configurado, sem expor nenhum dos dois por completo."""
+    expected = (os.environ.get("KIWIFY_WEBHOOK_TOKEN") or "").strip()
+    received = (token or "").strip()
+    return {
+        "expected_set": bool(expected),
+        "expected_length": len(expected),
+        "expected_tail": expected[-6:] if expected else None,
+        "received_length": len(received),
+        "received_tail": received[-6:] if received else None,
+        "match": expected == received,
+    }
+
+
 @router.get("/webhooks/kiwify/debug")
 def kiwify_webhook_debug(token: str | None = None, db: Session = Depends(get_db)):
     """Endpoint temporário para calibrar o parser com os payloads reais recebidos."""
