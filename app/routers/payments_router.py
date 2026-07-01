@@ -26,32 +26,6 @@ async def kiwify_webhook(request: Request, token: str | None = None, db: Session
     return {"received": True, "processed": event.processed}
 
 
-@router.get("/webhooks/kiwify/env-keys")
-def kiwify_env_keys():
-    """Endpoint temporário: lista os NOMES das variáveis de ambiente vistas pelo processo (sem valores)."""
-    return {
-        "keys": sorted(os.environ.keys()),
-        "railway_environment_name": os.environ.get("RAILWAY_ENVIRONMENT_NAME"),
-        "railway_service_name": os.environ.get("RAILWAY_SERVICE_NAME"),
-        "railway_deployment_id": os.environ.get("RAILWAY_DEPLOYMENT_ID"),
-        "railway_git_commit_sha": os.environ.get("RAILWAY_GIT_COMMIT_SHA"),
-    }
-
-
-@router.get("/webhooks/kiwify/diag")
-def kiwify_webhook_diag(token: str | None = None):
-    """Endpoint temporário só para comparar o token recebido com o configurado, sem expor nenhum dos dois por completo."""
-    expected = (os.environ.get("KIWIFY_WEBHOOK_TOKEN") or "").strip()
-    received = (token or "").strip()
-    return {
-        "expected_set": bool(expected),
-        "expected_length": len(expected),
-        "expected_tail": expected[-6:] if expected else None,
-        "received_length": len(received),
-        "received_tail": received[-6:] if received else None,
-        "match": expected == received,
-    }
-
 
 @router.get("/webhooks/kiwify/debug")
 def kiwify_webhook_debug(token: str | None = None, db: Session = Depends(get_db)):
