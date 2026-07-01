@@ -36,6 +36,16 @@ EVENTS_REVOKED = {"compra_reembolsada", "chargeback", "subscription_canceled"}
 EMAIL_PATHS = ["Customer.email", "customer.email", "email", "buyer.email"]
 EVENT_TYPE_KEYS = ["webhook_event_type", "event", "order_status"]
 PRODUCT_ID_PATHS = ["Product.product_id", "product.product_id", "product_id", "Subscription.plan.id"]
+PRODUCT_NAME_PATHS = ["Product.product_name", "product.product_name", "product_name"]
+
+# Mapeamento por nome de produto como fallback quando product_id não está em KIWIFY_PLAN_MAP.
+# Baseado nos nomes exatos cadastrados na Kiwify.
+PRODUCT_NAME_KEYWORDS: list[tuple[str, str]] = [
+    ("mensal", "mensal"),
+    ("anual", "anual"),
+    ("vitalicio", "vitalicio"),
+    ("vitalício", "vitalicio"),
+]
 
 PLAN_DURATION_DAYS = {"mensal": 30, "anual": 365}
 
@@ -82,11 +92,25 @@ def user_has_active_plan(db: Session, user: User) -> bool:
     return True
 
 
+def _plan_key_from_name(product_name: str | None) -> str | None:
+    if not product_name:
+        return None
+    name_lower = product_name.lower()
+    for keyword, plan_key in PRODUCT_NAME_KEYWORDS:
+        if keyword in name_lower:
+            return plan_key
+    return None
+
+
 def apply_kiwify_event(db: Session, payload: dict) -> PaymentEvent:
     email = _first_match(payload, EMAIL_PATHS)
     event_type = _first_match(payload, EVENT_TYPE_KEYS)
     product_id = _first_match(payload, PRODUCT_ID_PATHS)
+    product_name = _first_match(payload, PRODUCT_NAME_PATHS)
+
     plan_key = _plan_map().get(product_id) if product_id else None
+    if not plan_key:
+        plan_key = _plan_key_from_name(product_name)
 
     user = db.query(User).filter(User.email == email).first() if email else None
 
