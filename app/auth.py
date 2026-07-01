@@ -48,6 +48,8 @@ def require_admin(request: Request, db: Session = Depends(get_db)) -> User:
 
 def require_active_plan(request: Request, db: Session = Depends(get_db)) -> User:
     user = require_user(request, db)
+    if user.is_admin:
+        return user
     if not user_has_active_plan(db, user):
         raise PlanRequired()
     return user
