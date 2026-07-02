@@ -588,6 +588,98 @@ textarea:focus {
   padding: 24px 0 48px;
 }
 
+.quadro-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.quadro-desejos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+  max-width: 820px;
+  margin: 0 auto 32px;
+}
+
+.desejo-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 8px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.desejo-card:hover {
+  border-color: var(--neon-glow);
+  transform: translateY(-2px);
+}
+
+.desejo-card.active {
+  border-color: var(--neon);
+  background: var(--neon-soft);
+  box-shadow: 0 0 20px -4px var(--neon-glow);
+}
+
+.desejo-emoji {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.desejo-label {
+  font-size: 0.72rem;
+  text-align: center;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.desejo-card.active .desejo-label {
+  color: var(--neon);
+  font-weight: 600;
+}
+
+.desejo-form-grid {
+  display: grid;
+  grid-template-columns: 80px 1fr 160px;
+  gap: 12px;
+  align-items: end;
+}
+
+.desejo-admin-item {
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.desejo-inativo {
+  opacity: 0.45;
+}
+
+.desejo-admin-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex: 1;
+}
+
+.desejo-admin-emoji {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.desejo-admin-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .goal-selector {
   display: flex;
   flex-wrap: wrap;

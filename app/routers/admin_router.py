@@ -11,6 +11,7 @@ from app.database import get_db
 from app.models import (
     Challenge,
     ChallengeDay,
+    Desejo,
     Diagnostico,
     LearningContent,
     Tip,
@@ -19,6 +20,7 @@ from app.models import (
     UserLearningProgress,
     UserTipSuccess,
 )
+from app.auth import hash_password
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -121,6 +123,58 @@ def backup_db(user: User = Depends(require_admin)):
 
 
 PLAN_DURATIONS = {"mensal": 30, "anual": 365, "vitalicio": None}
+
+PLAN_KEYS = ["financas30", "financas50", "financas75", "financas100", "financas365", "financas500"]
+
+
+@router.get("/admin/desejos")
+def admin_desejos(request: Request, user: User = Depends(require_admin), db: Session = Depends(get_db)):
+    desejos = db.query(Desejo).order_by(Desejo.ordem).all()
+    return templates.TemplateResponse(
+        "admin_desejos.html",
+        {"request": request, "user": user, "desejos": desejos, "plan_keys": PLAN_KEYS},
+    )
+
+
+@router.post("/admin/desejos")
+def admin_desejos_create(
+    emoji: str = Form(...),
+    label: str = Form(...),
+    headline: str = Form(...),
+    subheadline: str = Form(...),
+    plan_key: str = Form(...),
+    user: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    max_ordem = db.query(Desejo).count()
+    db.add(Desejo(
+        emoji=emoji.strip(),
+        label=label.strip(),
+        headline=headline.strip(),
+        subheadline=subheadline.strip(),
+        plan_key=plan_key,
+        ordem=max_ordem + 1,
+    ))
+    db.commit()
+    return RedirectResponse("/admin/desejos", status_code=303)
+
+
+@router.post("/admin/desejos/{desejo_id}/toggle")
+def admin_desejos_toggle(desejo_id: int, user: User = Depends(require_admin), db: Session = Depends(get_db)):
+    desejo = db.query(Desejo).filter(Desejo.id == desejo_id).first()
+    if desejo:
+        desejo.ativo = not desejo.ativo
+        db.commit()
+    return RedirectResponse("/admin/desejos", status_code=303)
+
+
+@router.post("/admin/desejos/{desejo_id}/delete")
+def admin_desejos_delete(desejo_id: int, user: User = Depends(require_admin), db: Session = Depends(get_db)):
+    desejo = db.query(Desejo).filter(Desejo.id == desejo_id).first()
+    if desejo:
+        db.delete(desejo)
+        db.commit()
+    return RedirectResponse("/admin/desejos", status_code=303)
 
 
 @router.post("/admin/grant-access")

@@ -9,17 +9,25 @@
 </div>
 
 <div class="hero">
-  <div class="goal-selector" id="goal-selector">
-    <button type="button" class="goal-chip active" data-goal="apartamento">🏠 Apartamento</button>
-    <button type="button" class="goal-chip" data-goal="carro">🚗 Carro novo</button>
-    <button type="button" class="goal-chip" data-goal="viagem">✈️ Viagem dos sonhos</button>
-    <button type="button" class="goal-chip" data-goal="reserva">🛟 Reserva de emergência</button>
+  <div class="quadro-label">Toque no que você quer conquistar</div>
+
+  <div class="quadro-desejos" id="goal-selector">
+    {% for d in desejos %}
+    <button
+      type="button"
+      class="desejo-card {{ 'active' if loop.first else '' }}"
+      data-headline="{{ d.headline }}"
+      data-subheadline="{{ d.subheadline }}"
+    >
+      <span class="desejo-emoji">{{ d.emoji }}</span>
+      <span class="desejo-label">{{ d.label }}</span>
+    </button>
+    {% endfor %}
   </div>
 
-  <h1 class="hero-headline" id="hero-headline">Seu apartamento em 500 dias. Veja como.</h1>
+  <h1 class="hero-headline" id="hero-headline">{{ desejos[0].headline if desejos else "Seu sonho em dias. Veja como." }}</h1>
   <p class="page-subtitle hero-subheadline" id="hero-subheadline">
-    Descubra seu Score de Saúde Financeira em 5 minutos e siga o Desafio Finanças500+ — um plano gamificado, dia a
-    dia, até a entrada do seu imóvel.
+    {{ desejos[0].subheadline if desejos else "" }}
   </p>
   <a class="btn" id="hero-cta" href="/register">Fazer meu diagnóstico gratuito</a>
 

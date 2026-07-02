@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Quadro de Desejos · Admin · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Quadro de Desejos</div>
+<p class="page-subtitle">Gerencie os desejos exibidos na landing page. Ativos aparecem para os visitantes; inativos ficam ocultos.</p>
+
+<div class="card">
+  <div class="admin-card-title">Adicionar novo desejo</div>
+  <form method="post" action="/admin/desejos" class="desejo-form">
+    <div class="desejo-form-grid">
+      <div>
+        <label for="emoji">Emoji</label>
+        <input type="text" id="emoji" name="emoji" placeholder="🏠" maxlength="4" required />
+      </div>
+      <div>
+        <label for="label">Nome curto</label>
+        <input type="text" id="label" name="label" placeholder="Apartamento" required />
+      </div>
+      <div>
+        <label for="plan_key">Desafio associado</label>
+        <select id="plan_key" name="plan_key" title="Plano de desafio" required>
+          {% for pk in plan_keys %}
+          <option value="{{ pk }}">{{ pk }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <label for="headline">Headline (frase de impacto)</label>
+    <input type="text" id="headline" name="headline" placeholder="Seu sonho em X dias. Veja como." required />
+    <label for="subheadline">Subheadline (descrição)</label>
+    <textarea id="subheadline" name="subheadline" rows="2" placeholder="Descubra seu Score e siga o Desafio..." required></textarea>
+    <button class="btn" type="submit">Adicionar desejo</button>
+  </form>
+</div>
+
+<div class="card">
+  <div class="admin-card-title">Desejos cadastrados ({{ desejos|length }})</div>
+  {% for d in desejos %}
+  <div class="list-item desejo-admin-item {{ '' if d.ativo else 'desejo-inativo' }}">
+    <div class="desejo-admin-info">
+      <span class="desejo-admin-emoji">{{ d.emoji }}</span>
+      <div>
+        <strong>{{ d.label }}</strong>
+        <div class="tip-author">{{ d.headline }}</div>
+        <div class="tip-author">Plano: {{ d.plan_key }}</div>
+      </div>
+    </div>
+    <div class="desejo-admin-actions">
+      <form method="post" action="/admin/desejos/{{ d.id }}/toggle">
+        <button class="btn btn-small btn-secondary" type="submit">
+          {{ "Desativar" if d.ativo else "Ativar" }}
+        </button>
+      </form>
+      <form method="post" action="/admin/desejos/{{ d.id }}/delete">
+        <button class="btn btn-small" style="background: var(--danger)" type="submit"
+          onclick="return confirm('Excluir {{ d.label }}?')">Excluir</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<a class="btn btn-secondary" href="/admin">← Voltar ao painel</a>
+{% endblock %}

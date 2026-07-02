@@ -171,6 +171,20 @@ class UserTipProgress(Base):
     __table_args__ = (UniqueConstraint("user_id", "tip_id", name="uq_user_tip"),)
 
 
+class Desejo(Base):
+    __tablename__ = "desejos"
+
+    id = Column(Integer, primary_key=True, index=True)
+    emoji = Column(String, nullable=False)
+    label = Column(String, nullable=False)
+    headline = Column(String, nullable=False)
+    subheadline = Column(Text, nullable=False)
+    plan_key = Column(String, default="financas365")
+    ordem = Column(Integer, default=0)
+    ativo = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=now)
+
+
 class Diagnostico(Base):
     __tablename__ = "diagnosticos"
 

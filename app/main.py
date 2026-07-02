@@ -11,7 +11,7 @@ from app.auth import NotAuthenticated, PlanRequired, require_user
 from app.database import Base, SessionLocal, engine, get_db
 from app.finance_logic import challenge_pace_status
 from app.gamification import compute_badges, current_streak
-from app.models import Challenge, LearningContent, Tip, User
+from app.models import Challenge, Desejo, LearningContent, Tip, User
 from app.routers import (
     admin_router,
     auth_router,
@@ -65,6 +65,8 @@ def _run_migrations():
         "ALTER TABLE users ADD COLUMN plan_expires_at TIMESTAMP",
         "ALTER TABLE users ADD COLUMN reset_token TEXT",
         "ALTER TABLE users ADD COLUMN reset_token_at TIMESTAMP",
+        "ALTER TABLE tips ADD COLUMN source TEXT DEFAULT 'admin'",
+        "ALTER TABLE tips ADD COLUMN author_name TEXT",
     ]
     with engine.connect() as conn:
         for sql in migrations:
@@ -87,10 +89,11 @@ def on_startup():
 
 
 @app.get("/")
-def root(request: Request):
+def root(request: Request, db: Session = Depends(get_db)):
     user_id = request.session.get("user_id")
     if not user_id:
-        return templates.TemplateResponse("landing.html", {"request": request, "user": None})
+        desejos = db.query(Desejo).filter(Desejo.ativo.is_(True)).order_by(Desejo.ordem).all()
+        return templates.TemplateResponse("landing.html", {"request": request, "user": None, "desejos": desejos})
     return RedirectResponse("/dashboard", status_code=303)
 
 
