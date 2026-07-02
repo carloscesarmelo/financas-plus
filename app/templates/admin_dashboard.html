@@ -4,6 +4,30 @@
 <div class="page-title">Painel Administrativo</div>
 <p class="page-subtitle">Visão geral da plataforma em tempo real.</p>
 
+{% if grant_message == "acesso_liberado" %}
+<div class="disclaimer">Acesso liberado com sucesso!</div>
+{% elif grant_message == "email_nao_encontrado" %}
+<div class="error-box">E-mail não encontrado. O usuário precisa se cadastrar primeiro.</div>
+{% endif %}
+
+<div class="card">
+  <div class="admin-card-title">Liberar acesso gratuito</div>
+  <form method="post" action="/admin/grant-access" class="grant-form">
+    <div class="grant-form-fields">
+      <input type="email" name="email" placeholder="E-mail do usuário" required />
+      <select name="plan" title="Tipo de plano" required>
+        <option value="mensal">Mensal (30 dias)</option>
+        <option value="anual">Anual (365 dias)</option>
+        <option value="vitalicio">Vitalício (permanente)</option>
+      </select>
+      <button class="btn" type="submit">Liberar acesso</button>
+    </div>
+  </form>
+  <p class="page-subtitle grant-hint">
+    O usuário precisa já ter se cadastrado no app. Após liberar, o acesso é imediato.
+  </p>
+</div>
+
 <div class="admin-actions">
   <a class="btn btn-secondary" href="/admin/tips">+ Dica</a>
   <a class="btn btn-secondary" href="/admin/learn">+ Conteúdo</a>

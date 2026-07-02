@@ -1,6 +1,7 @@
 import datetime
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Form, Request
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
@@ -67,6 +68,8 @@ def admin_dashboard(request: Request, user: User = Depends(require_admin), db: S
         .all()
     )
 
+    grant_message = request.query_params.get("msg")
+
     return templates.TemplateResponse(
         "admin_dashboard.html",
         {
@@ -91,5 +94,30 @@ def admin_dashboard(request: Request, user: User = Depends(require_admin), db: S
             },
             "top_tips_data": top_tips_data,
             "recent_users": recent_users,
+            "grant_message": grant_message,
         },
     )
+
+
+PLAN_DURATIONS = {"mensal": 30, "anual": 365, "vitalicio": None}
+
+
+@router.post("/admin/grant-access")
+def grant_access(
+    email: str = Form(...),
+    plan: str = Form(...),
+    user: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+):
+    target = db.query(User).filter(User.email == email.strip().lower()).first()
+    if not target:
+        return RedirectResponse("/admin?msg=email_nao_encontrado", status_code=303)
+
+    days = PLAN_DURATIONS.get(plan)
+    target.plan = plan
+    target.plan_active = True
+    target.plan_expires_at = (
+        datetime.datetime.utcnow() + datetime.timedelta(days=days) if days else None
+    )
+    db.commit()
+    return RedirectResponse("/admin?msg=acesso_liberado", status_code=303)
