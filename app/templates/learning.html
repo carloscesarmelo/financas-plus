@@ -2,24 +2,60 @@
 {% block title %}Aprender · FINANÇAS+{% endblock %}
 {% block content %}
 <div class="page-title">Aprender sobre Finanças</div>
-<p class="page-subtitle">Conteúdo selecionado, organizado por nível de conhecimento.</p>
+<p class="page-subtitle">
+  Conteúdo selecionado por nível. Cada conteúdo concluído vale
+  <span class="learn-xp-info">+{{ xp_per_content }} XP</span>.
+</p>
 
 {% if user.is_admin %}
 <a class="btn btn-secondary" href="/admin/learn">+ Adicionar conteúdo (admin)</a>
 {% endif %}
 
 {% for level, contents in by_level.items() %}
+{% set stats = level_stats[level] %}
 <div class="card">
-  <div class="page-title" style="font-size: 1.2rem">{{ level_labels.get(level, level) }}</div>
+  <div class="learn-level-header">
+    <div>
+      <div class="learn-level-title">{{ level_labels.get(level, level) }}</div>
+      <div class="learn-level-progress-label">
+        {% if stats.total == 0 %}
+          Nenhum conteúdo cadastrado ainda
+        {% elif stats.completed == stats.total %}
+          <span class="learn-level-complete">Nível completo!</span>
+        {% else %}
+          {{ stats.completed }} de {{ stats.total }} concluídos
+        {% endif %}
+      </div>
+    </div>
+    {% if stats.total > 0 %}
+    <div class="learn-level-pct">{{ stats.pct }}%</div>
+    {% endif %}
+  </div>
+
+  {% if stats.total > 0 %}
+  <div class="progress-bar learn-progress-bar">
+    <div class="progress-bar-fill" style="width: {{ stats.pct }}%"></div>
+  </div>
+  {% endif %}
+
   {% if contents %}
   {% for content in contents %}
-  <div class="list-item">
-    <div>
+  {% set is_done = content.id in completed_ids %}
+  <div class="list-item learn-item {{ 'learn-item-done' if is_done else '' }}">
+    <div class="learn-item-info">
       <span class="tag">{{ content.content_type }}</span>
-      <div><a href="{{ content.url }}" target="_blank" rel="noopener">{{ content.title }}</a></div>
+      {% if not is_done %}
+      <span class="learn-xp-badge">+{{ xp_per_content }} XP</span>
+      {% endif %}
+      <div>
+        <a href="{{ content.url }}" target="_blank" rel="noopener"
+           class="{{ 'learn-done-link' if is_done else '' }}">
+          {{ content.title }}
+        </a>
+      </div>
     </div>
-    {% if content.id in completed_ids %}
-    <span class="nav-pill">Concluído</span>
+    {% if is_done %}
+    <span class="nav-pill">✓ Concluído</span>
     {% else %}
     <form method="post" action="/learn/{{ content.id }}/complete">
       <button class="btn btn-small" type="submit">Marcar como concluído</button>

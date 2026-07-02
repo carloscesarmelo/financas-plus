@@ -27,6 +27,16 @@ def learn_home(request: Request, user: User = Depends(require_active_plan), db: 
     for content in contents:
         by_level.setdefault(content.level, []).append(content)
 
+    level_stats = {}
+    for level in LEVELS:
+        total = len(by_level.get(level, []))
+        completed = sum(1 for c in by_level.get(level, []) if c.id in completed_ids)
+        level_stats[level] = {
+            "total": total,
+            "completed": completed,
+            "pct": int(completed / total * 100) if total else 0,
+        }
+
     return templates.TemplateResponse(
         "learning.html",
         {
@@ -35,6 +45,8 @@ def learn_home(request: Request, user: User = Depends(require_active_plan), db: 
             "by_level": by_level,
             "level_labels": LEVEL_LABELS,
             "completed_ids": completed_ids,
+            "level_stats": level_stats,
+            "xp_per_content": 20,
         },
     )
 

@@ -717,6 +717,73 @@ textarea:focus {
   margin-bottom: 0;
 }
 
+.learn-level-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.learn-level-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.learn-level-progress-label {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.learn-level-complete {
+  color: var(--neon);
+}
+
+.learn-level-pct {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--neon);
+}
+
+.learn-xp-badge {
+  display: inline-block;
+  background: var(--neon-soft);
+  color: var(--neon);
+  border: 1px solid var(--neon-glow);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.learn-item {
+  align-items: flex-start;
+}
+
+.learn-item-done {
+  opacity: 0.6;
+}
+
+.learn-item-info {
+  flex: 1;
+}
+
+.learn-done-link {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.learn-progress-bar {
+  margin-bottom: 16px;
+}
+
+.learn-xp-info {
+  font-weight: 700;
+  color: var(--neon);
+}
+
 .auth-wrapper {
   max-width: 420px;
   margin: 80px auto;
