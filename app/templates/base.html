@@ -17,6 +17,9 @@
       <a href="/learn">Aprender</a>
       <a href="/tips">Renda Extra</a>
       <a href="/planos">Planos</a>
+      {% if user.is_admin %}
+      <a href="/admin" class="nav-pill nav-pill-admin">Admin</a>
+      {% endif %}
       <span class="nav-pill">Nível {{ user.level }} · {{ user.xp }} XP</span>
       {% if not user.plan_active %}
       <a href="/planos" class="nav-pill nav-pill-free">Free</a>

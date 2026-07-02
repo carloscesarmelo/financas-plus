@@ -13,6 +13,7 @@ from app.finance_logic import challenge_pace_status
 from app.gamification import compute_badges, current_streak
 from app.models import Challenge, LearningContent, Tip, User
 from app.routers import (
+    admin_router,
     auth_router,
     challenges_router,
     diagnostico_router,
@@ -32,6 +33,7 @@ app.add_middleware(SessionMiddleware, secret_key=os.environ.get("SECRET_KEY", "d
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
+app.include_router(admin_router.router)
 app.include_router(auth_router.router)
 app.include_router(onboarding_router.router)
 app.include_router(diagnostico_router.router)

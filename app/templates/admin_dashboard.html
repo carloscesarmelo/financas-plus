@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}Painel Admin · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Painel Administrativo</div>
+<p class="page-subtitle">Visão geral da plataforma em tempo real.</p>
+
+<div class="admin-actions">
+  <a class="btn btn-secondary" href="/admin/tips">+ Dica</a>
+  <a class="btn btn-secondary" href="/admin/learn">+ Conteúdo</a>
+  {% if stats.pending_suggestions > 0 %}
+  <a class="btn btn-secondary" href="/admin/tips/suggestions">
+    Sugestões pendentes <span class="tips-pending-badge">{{ stats.pending_suggestions }}</span>
+  </a>
+  {% endif %}
+</div>
+
+<div class="page-subtitle admin-section-label">Usuários</div>
+<div class="grid grid-3">
+  <div class="card metric">
+    <div class="value">{{ stats.total_users }}</div>
+    <div class="label">Total cadastrados</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.users_paid }}</div>
+    <div class="label">Planos ativos (pagos)</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.users_free }}</div>
+    <div class="label">Usuários gratuitos</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.new_this_week }}</div>
+    <div class="label">Novos esta semana</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.new_this_month }}</div>
+    <div class="label">Novos este mês</div>
+  </div>
+</div>
+
+<div class="page-subtitle admin-section-label">Planos ativos</div>
+<div class="grid grid-3">
+  <div class="card metric">
+    <div class="value">{{ stats.plan_mensal }}</div>
+    <div class="label">Mensal</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.plan_anual }}</div>
+    <div class="label">Anual</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.plan_vitalicio }}</div>
+    <div class="label">Vitalício</div>
+  </div>
+</div>
+
+<div class="page-subtitle admin-section-label">Engajamento</div>
+<div class="grid grid-3">
+  <div class="card metric">
+    <div class="value">{{ stats.total_diagnosticos }}</div>
+    <div class="label">Diagnósticos realizados</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.avg_score }}%</div>
+    <div class="label">Score médio de saúde financeira</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.total_challenges }}</div>
+    <div class="label">Desafios iniciados</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.total_days_marked }}</div>
+    <div class="label">Dias marcados no tabuleiro</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.total_learning_completions }}</div>
+    <div class="label">Conteúdos concluídos</div>
+  </div>
+  <div class="card metric">
+    <div class="value">{{ stats.total_tip_successes }}</div>
+    <div class="label">Casos de sucesso registrados</div>
+  </div>
+</div>
+
+{% if top_tips_data %}
+<div class="page-subtitle admin-section-label">Dicas com mais sucesso</div>
+<div class="card">
+  {% for item in top_tips_data %}
+  <div class="list-item">
+    <div>
+      <span class="tag">{{ item.tip.category }}</span>
+      {% if item.tip.source == "community" %}<span class="tag tip-community-badge">Comunidade</span>{% endif %}
+      <strong>{{ item.tip.title }}</strong>
+    </div>
+    <span class="nav-pill">⭐ {{ item.success_count }}</span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if recent_users %}
+<div class="page-subtitle admin-section-label">Últimos cadastros</div>
+<div class="card">
+  {% for u in recent_users %}
+  <div class="list-item">
+    <div>
+      <strong>{{ u.name }}</strong>
+      <div class="tip-author">{{ u.email }}</div>
+    </div>
+    <div class="admin-user-meta">
+      {% if u.plan_active %}
+      <span class="tag tip-community-badge">{{ u.plan }}</span>
+      {% else %}
+      <span class="tag">free</span>
+      {% endif %}
+      <span class="page-subtitle">{{ u.created_at.strftime("%d/%m/%Y") }}</span>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}
