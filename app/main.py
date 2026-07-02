@@ -23,6 +23,7 @@ from app.routers import (
     tips_router,
 )
 from app.seed import run_seed
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 app = FastAPI(title="FINANÇAS+")
@@ -51,8 +52,26 @@ def handle_plan_required(request: Request, exc: PlanRequired):
     return RedirectResponse("/planos", status_code=303)
 
 
+def _run_migrations():
+    migrations = [
+        "ALTER TABLE tips ADD COLUMN source TEXT DEFAULT 'admin'",
+        "ALTER TABLE tips ADD COLUMN author_name TEXT",
+        "ALTER TABLE users ADD COLUMN plan TEXT DEFAULT 'free'",
+        "ALTER TABLE users ADD COLUMN plan_active INTEGER DEFAULT 0",
+        "ALTER TABLE users ADD COLUMN plan_expires_at TIMESTAMP",
+    ]
+    with engine.connect() as conn:
+        for sql in migrations:
+            try:
+                conn.execute(text(sql))
+                conn.commit()
+            except Exception:
+                pass
+
+
 @app.on_event("startup")
 def on_startup():
+    _run_migrations()
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:

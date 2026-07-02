@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c ' *)",
+      "Bash(rm -f test_admin.txt)",
+      "Bash(curl -s -c test_admin.txt -X POST https://financas-plus-production.up.railway.app/register -d 'name=Carlos Admin' -d email=carlosmelo085%40gmail.com -d password=admin123 -D - -o /dev/null -w 'register -> %{http_code}\\\\n')",
+      "Bash(python -m py_compile app/models.py app/gamification.py app/routers/tips_router.py app/main.py)"
+    ]
+  }
+}
