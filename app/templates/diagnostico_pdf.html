@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diagnóstico FINANÇAS+ · {{ user.name }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, Helvetica, sans-serif; color: #111; background: #fff; padding: 32px; max-width: 800px; margin: 0 auto; }
+
+    .pdf-header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #111; padding-bottom: 16px; margin-bottom: 24px; }
+    .pdf-brand { font-size: 2rem; font-weight: 900; letter-spacing: -1px; }
+    .pdf-brand span { color: #1a7a3f; }
+    .pdf-meta { text-align: right; font-size: 0.85rem; color: #555; }
+    .pdf-meta strong { color: #111; font-size: 1rem; }
+
+    .pdf-score-section { text-align: center; margin: 24px 0; padding: 24px; border: 2px solid #111; border-radius: 12px; background: #f8f8f8; }
+    .pdf-score-value { font-size: 4rem; font-weight: 900; color: #1a7a3f; line-height: 1; }
+    .pdf-score-label { font-size: 1.1rem; color: #555; margin-top: 6px; }
+    .pdf-score-sub { font-size: 0.9rem; color: #777; margin-top: 4px; }
+
+    .pdf-section-title { font-size: 1.1rem; font-weight: 700; margin: 28px 0 12px; padding-bottom: 6px; border-bottom: 1px solid #ddd; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .pdf-area { margin-bottom: 20px; page-break-inside: avoid; }
+    .pdf-area-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .pdf-area-title { font-weight: 700; font-size: 0.95rem; }
+    .pdf-area-score { font-weight: 900; font-size: 1rem; color: #1a7a3f; }
+    .pdf-bar-track { height: 10px; background: #e0e0e0; border-radius: 999px; overflow: hidden; margin-bottom: 6px; }
+    .pdf-bar-fill { height: 100%; background: #1a7a3f; border-radius: 999px; }
+    .pdf-area-choice { font-size: 0.8rem; color: #555; font-style: italic; margin-bottom: 4px; }
+    .pdf-area-feedback { font-size: 0.85rem; color: #333; background: #f0f7f3; border-left: 3px solid #1a7a3f; padding: 8px 12px; border-radius: 0 6px 6px 0; }
+
+    .pdf-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #ddd; display: flex; justify-content: space-between; font-size: 0.8rem; color: #777; }
+
+    .no-print { text-align: center; margin-bottom: 24px; }
+    .no-print button { background: #1a7a3f; color: #fff; border: none; padding: 12px 28px; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; }
+    .no-print a { margin-left: 16px; color: #555; font-size: 0.9rem; }
+
+    @media print {
+      .no-print { display: none; }
+      body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="no-print">
+  <button onclick="window.print()">Imprimir / Salvar como PDF</button>
+  <a href="/diagnostico/resultado">← Voltar</a>
+</div>
+
+<div class="pdf-header">
+  <div class="pdf-brand">FINANÇAS<span>+</span></div>
+  <div class="pdf-meta">
+    <strong>{{ user.name }}</strong><br>
+    Diagnóstico realizado em {{ atual.data_diagnostico.strftime("%d/%m/%Y") }}<br>
+    Próximo disponível em {{ proximo }}
+  </div>
+</div>
+
+<div class="pdf-score-section">
+  <div class="pdf-score-value">{{ atual.percentual_geral | round(1) }}%</div>
+  <div class="pdf-score-label">Índice de Saúde Financeira</div>
+  <div class="pdf-score-sub">{{ atual.pontuacao_total }} de {{ pontuacao_maxima }} pontos · Use este relatório como guia de evolução</div>
+</div>
+
+<div class="pdf-section-title">Análise detalhada por área</div>
+
+{% for area in areas_resultado %}
+<div class="pdf-area">
+  <div class="pdf-area-header">
+    <div class="pdf-area-title">{{ loop.index }}. {{ area.title }}</div>
+    <div class="pdf-area-score">{{ area.valor }}/3</div>
+  </div>
+  <div class="pdf-bar-track">
+    <div class="pdf-bar-fill" style="width: {{ (area.valor / 3 * 100) | int }}%"></div>
+  </div>
+  <div class="pdf-area-choice">Resposta selecionada: {{ area.label }}</div>
+  <div class="pdf-area-feedback">{{ area.feedback }}</div>
+</div>
+{% endfor %}
+
+<div class="pdf-footer">
+  <span>FINANÇAS+ · financas-plus-production.up.railway.app</span>
+  <span>Diagnóstico realizado em {{ atual.data_diagnostico.strftime("%d/%m/%Y às %H:%M") }} UTC</span>
+</div>
+
+</body>
+</html>

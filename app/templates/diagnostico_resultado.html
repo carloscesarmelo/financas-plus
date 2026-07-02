@@ -14,21 +14,22 @@
       <div class="gauge-label">Saúde Financeira</div>
     </div>
   </div>
-  <p class="page-subtitle" style="margin-top: 16px; margin-bottom: 0;">
+  <p class="page-subtitle diag-score-note">
     {{ atual.pontuacao_total }} de 24 pontos possíveis
   </p>
 </div>
 
-{% if lock.locked %}
-<div class="disclaimer locked-card">
-  🔒 Próximo diagnóstico disponível em {{ lock.days_remaining }} dia{{ "s" if lock.days_remaining != 1 else "" }}.
+<div class="diag-actions">
+  <a class="btn btn-secondary" href="/diagnostico/resultado/imprimir" target="_blank">⬇ Baixar PDF / Imprimir</a>
+  {% if lock.locked %}
+  <span class="disclaimer locked-card">🔒 Próximo diagnóstico em {{ lock.days_remaining }} dia{{ "s" if lock.days_remaining != 1 else "" }}</span>
+  {% else %}
+  <a class="btn btn-secondary" href="/diagnostico">Refazer diagnóstico</a>
+  {% endif %}
 </div>
-{% else %}
-<a class="btn btn-secondary" href="/diagnostico">Refazer diagnóstico</a>
-{% endif %}
 
 <div class="card">
-  <div class="page-title" style="font-size: 1.2rem">Detalhamento por área</div>
+  <div class="card-section-title">Detalhamento por área</div>
   <div class="sim-bars">
     {% for area in areas_resultado %}
     <div>
@@ -47,7 +48,7 @@
 
 {% if anterior %}
 <div class="card">
-  <div class="page-title" style="font-size: 1.2rem">Evolução em relação ao diagnóstico anterior</div>
+  <div class="card-section-title">Evolução em relação ao diagnóstico anterior</div>
   <div class="compare-bars">
     {% for area in areas_resultado %}
     <div class="compare-row">
@@ -66,7 +67,7 @@
     </div>
     {% endfor %}
   </div>
-  <p class="sim-sub" style="margin-top: 12px;">
+  <p class="sim-sub diag-legend">
     <span class="compare-legend-dot compare-fill-previous"></span> Anterior
     &nbsp;&nbsp;
     <span class="compare-legend-dot compare-fill-current"></span> Atual

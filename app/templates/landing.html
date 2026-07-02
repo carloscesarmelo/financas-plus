@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}FINANÇAS+ · Diagnóstico gratuito e desafio gamificado{% endblock %}
+{% block og_title %}FINANÇAS+ · Diagnóstico e Desafios de Saúde Financeira{% endblock %}
 {% block content %}
 
 <div class="landing-top">
@@ -30,16 +31,16 @@
           <div class="gauge-label">Saúde Financeira</div>
         </div>
       </div>
-      <p class="sim-sub" style="margin-top: 12px">Exemplo real do seu Dashboard de Diagnóstico</p>
+      <p class="sim-sub landing-mock-note">Exemplo real do seu Dashboard de Diagnóstico</p>
     </div>
     <div class="card">
-      <div class="sim-name" style="margin-bottom: 10px">Desafio Finanças500+</div>
+      <div class="sim-name landing-mock-title">Desafio Finanças500+</div>
       <div class="mini-board">
         {% for i in range(24) %}
         <div class="mini-board-day {{ 'marked' if i < 9 else '' }}"></div>
         {% endfor %}
       </div>
-      <p class="sim-sub" style="margin-top: 10px">9 de 500 dias marcados — R$ 1.350,00 guardados</p>
+      <p class="sim-sub landing-mock-note">9 de 500 dias marcados — R$ 1.350,00 guardados</p>
     </div>
   </div>
 </div>
@@ -47,10 +48,10 @@
 <div class="card">
   <div class="page-title section-title">Por que isso ainda não funcionou pra você?</div>
   <div class="grid grid-2">
-    <div class="list-item" style="border-bottom: none">📉 Você já tentou controlar gastos em planilha e desistiu depois de duas semanas.</div>
-    <div class="list-item" style="border-bottom: none">🤷 Você não sabe se está indo bem ou mal com seu dinheiro — só vê o saldo no fim do mês.</div>
-    <div class="list-item" style="border-bottom: none">🎯 Seu objetivo (imóvel, carro, viagem) parece distante demais para virar um plano real.</div>
-    <div class="list-item" style="border-bottom: none">😩 Falta o empurrão diário — sem gamificação, é fácil abandonar no primeiro tropeço.</div>
+    <div class="list-item landing-pain-item">📉 Você já tentou controlar gastos em planilha e desistiu depois de duas semanas.</div>
+    <div class="list-item landing-pain-item">🤷 Você não sabe se está indo bem ou mal com seu dinheiro — só vê o saldo no fim do mês.</div>
+    <div class="list-item landing-pain-item">🎯 Seu objetivo (imóvel, carro, viagem) parece distante demais para virar um plano real.</div>
+    <div class="list-item landing-pain-item">😩 Falta o empurrão diário — sem gamificação, é fácil abandonar no primeiro tropeço.</div>
   </div>
 </div>
 
@@ -64,8 +65,8 @@
     </div>
     <div class="card metric">
       <div class="tag">Passo 2</div>
-      <div class="sim-name">Seu Score</div>
-      <p class="sim-sub">Veja sua Saúde Financeira em % e o que fazer em cada área.</p>
+      <div class="sim-name">Seu Score + Guia PDF</div>
+      <p class="sim-sub">Veja seu percentual de Saúde Financeira e baixe um relatório personalizado para consultar sempre.</p>
     </div>
     <div class="card metric">
       <div class="tag">Passo 3</div>
@@ -74,6 +75,11 @@
     </div>
     <div class="card metric">
       <div class="tag">Passo 4</div>
+      <div class="sim-name">Aprenda + ganhe</div>
+      <p class="sim-sub">Conteúdos por nível de conhecimento e dicas de renda extra validadas pela comunidade.</p>
+    </div>
+    <div class="card metric">
+      <div class="tag">Passo 5</div>
       <div class="sim-name">Evolução visível</div>
       <p class="sim-sub">XP, níveis, badges e comparação entre diagnósticos a cada 90 dias.</p>
     </div>
@@ -84,39 +90,39 @@
   <div class="page-title section-title">Tudo isso já dentro da plataforma</div>
   <div class="grid grid-3">
     <div class="card">
-      <div class="badge unlocked" style="width: 100%; min-width: 0;">
+      <div class="badge unlocked landing-badge">
         <div class="badge-name">Diagnóstico Financeiro</div>
-        <div class="badge-desc">Score geral + detalhamento por área, com feedback imediato.</div>
+        <div class="badge-desc">Score geral + detalhamento por área com feedback imediato.</div>
       </div>
     </div>
     <div class="card">
-      <div class="badge unlocked" style="width: 100%; min-width: 0;">
+      <div class="badge unlocked landing-badge">
+        <div class="badge-name">Guia PDF Personalizado</div>
+        <div class="badge-desc">Relatório do seu diagnóstico para imprimir ou salvar e consultar a qualquer momento.</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="badge unlocked landing-badge">
         <div class="badge-name">Desafios de Poupança</div>
         <div class="badge-desc">Planos de 30 a 500 dias com tabuleiro visual e metas claras.</div>
       </div>
     </div>
     <div class="card">
-      <div class="badge unlocked" style="width: 100%; min-width: 0;">
+      <div class="badge unlocked landing-badge">
         <div class="badge-name">Gamificação</div>
-        <div class="badge-desc">XP, níveis e conquistas para manter a consistência.</div>
+        <div class="badge-desc">XP, níveis e conquistas para manter a consistência dia a dia.</div>
       </div>
     </div>
     <div class="card">
-      <div class="badge unlocked" style="width: 100%; min-width: 0;">
-        <div class="badge-name">Aprender</div>
-        <div class="badge-desc">Conteúdos em vídeo, artigo e podcast por nível de conhecimento.</div>
+      <div class="badge unlocked landing-badge">
+        <div class="badge-name">Comunidade ativa</div>
+        <div class="badge-desc">Dicas validadas pela comunidade — veja quantas pessoas tiveram sucesso com cada estratégia.</div>
       </div>
     </div>
     <div class="card">
-      <div class="badge unlocked" style="width: 100%; min-width: 0;">
-        <div class="badge-name">Renda Extra</div>
-        <div class="badge-desc">Dicas práticas para acelerar o seu objetivo.</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="badge unlocked" style="width: 100%; min-width: 0;">
-        <div class="badge-name">Evolução acompanhada</div>
-        <div class="badge-desc">Comparação automática entre diagnósticos a cada 90 dias.</div>
+      <div class="badge unlocked landing-badge">
+        <div class="badge-name">Aprender por nível</div>
+        <div class="badge-desc">Vídeos, artigos e podcasts organizados do básico ao avançado, com XP por conteúdo concluído.</div>
       </div>
     </div>
   </div>
@@ -163,6 +169,10 @@
   <details class="faq-item">
     <summary>Funciona pelo celular?</summary>
     <p class="sim-sub">Sim, a plataforma é 100% web e funciona em qualquer navegador, sem instalar nada.</p>
+  </details>
+  <details class="faq-item">
+    <summary>Posso salvar meu diagnóstico?</summary>
+    <p class="sim-sub">Sim — após o diagnóstico você pode baixar um PDF personalizado com seu score, análise por área e plano de ação para consultar quando quiser ou imprimir.</p>
   </details>
   <details class="faq-item">
     <summary>Posso cancelar quando quiser?</summary>

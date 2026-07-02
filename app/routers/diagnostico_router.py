@@ -112,14 +112,55 @@ def diagnostico_resultado(request: Request, user: User = Depends(require_user), 
             }
         )
 
+    ctx = {
+        "request": request,
+        "user": user,
+        "atual": atual,
+        "anterior": anterior,
+        "areas_resultado": areas_resultado,
+        "lock": lock,
+    }
+
+    return templates.TemplateResponse("diagnostico_resultado.html", ctx)
+
+
+@router.get("/diagnostico/resultado/imprimir")
+def diagnostico_imprimir(request: Request, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    diagnosticos = (
+        db.query(Diagnostico)
+        .filter(Diagnostico.user_id == user.id)
+        .order_by(Diagnostico.data_diagnostico.desc())
+        .all()
+    )
+
+    if not diagnosticos:
+        return RedirectResponse("/diagnostico", status_code=303)
+
+    atual = diagnosticos[0]
+    areas_resultado = []
+    for area in AREAS:
+        valor_atual = atual.pontuacao_areas.get(area["key"], 0)
+        opcao = next((opt for opt in area["options"] if opt["value"] == valor_atual), None)
+        areas_resultado.append(
+            {
+                "title": area["title"],
+                "valor": valor_atual,
+                "feedback": opcao["feedback"] if opcao else "",
+                "label": opcao["label"] if opcao else "",
+            }
+        )
+
+    lock = lock_status(atual)
+    proximo = (atual.data_diagnostico + datetime.timedelta(days=DIAS_BLOQUEIO)).strftime("%d/%m/%Y")
+
     return templates.TemplateResponse(
-        "diagnostico_resultado.html",
+        "diagnostico_pdf.html",
         {
             "request": request,
             "user": user,
             "atual": atual,
-            "anterior": anterior,
             "areas_resultado": areas_resultado,
-            "lock": lock,
+            "proximo": proximo,
+            "pontuacao_maxima": PONTUACAO_MAXIMA,
         },
     )

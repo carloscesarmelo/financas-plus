@@ -985,6 +985,46 @@ textarea:focus {
   gap: 8px;
 }
 
+.diag-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.diag-score-note {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+.card-section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.diag-legend {
+  margin-top: 12px;
+}
+
+.landing-pain-item {
+  border-bottom: none;
+}
+
+.landing-mock-note {
+  margin-top: 12px;
+}
+
+.landing-mock-title {
+  margin-bottom: 10px;
+}
+
+.landing-badge {
+  width: 100%;
+  min-width: 0;
+}
+
 .auth-wrapper {
   max-width: 420px;
   margin: 80px auto;
