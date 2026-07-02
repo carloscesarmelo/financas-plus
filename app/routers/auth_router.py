@@ -1,3 +1,5 @@
+import os
+
 from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -6,6 +8,12 @@ from sqlalchemy.orm import Session
 from app.auth import hash_password, verify_password
 from app.database import get_db
 from app.models import User
+
+
+def _is_admin_email(email: str) -> bool:
+    raw = os.environ.get("ADMIN_EMAILS", "")
+    admins = {e.strip().lower() for e in raw.split(",") if e.strip()}
+    return email.lower() in admins
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -33,7 +41,12 @@ def register_submit(
             status_code=400,
         )
 
-    user = User(name=name.strip(), email=email_normalized, password_hash=hash_password(password))
+    user = User(
+        name=name.strip(),
+        email=email_normalized,
+        password_hash=hash_password(password),
+        is_admin=_is_admin_email(email_normalized),
+    )
     db.add(user)
     db.commit()
     db.refresh(user)
