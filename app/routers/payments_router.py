@@ -42,8 +42,12 @@ def make_admin(email: str, token: str | None = None, db: Session = Depends(get_d
 @router.get("/internal/users-debug")
 def users_debug(token: str | None = None, db: Session = Depends(get_db)):
     _check_token(token)
+    import os as _os
     users = db.query(User).all()
-    return [{"id": u.id, "email": u.email, "is_admin": u.is_admin, "plan": u.plan, "plan_active": u.plan_active} for u in users]
+    return {
+        "database_url": _os.environ.get("DATABASE_URL", "NAO DEFINIDA"),
+        "users": [{"id": u.id, "email": u.email, "is_admin": u.is_admin, "plan": u.plan, "plan_active": u.plan_active} for u in users],
+    }
 
 
 @router.get("/webhooks/kiwify/debug")
