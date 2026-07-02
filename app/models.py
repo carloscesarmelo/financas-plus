@@ -148,9 +148,12 @@ class Tip(Base):
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     category = Column(String, nullable=False)
+    source = Column(String, default="admin")  # admin | community
+    author_name = Column(String, nullable=True)  # null = equipe FINANÇAS+
     created_at = Column(DateTime, default=now)
 
     completions = relationship("UserTipProgress", back_populates="tip", cascade="all, delete-orphan")
+    successes = relationship("UserTipSuccess", back_populates="tip", cascade="all, delete-orphan")
 
 
 class UserTipProgress(Base):
@@ -192,6 +195,35 @@ class PaymentEvent(Base):
     plan_applied = Column(String, nullable=True)
     processed = Column(Boolean, default=False)
     raw_payload = Column(JSON, nullable=False)
+    created_at = Column(DateTime, default=now)
+
+    user = relationship("User")
+
+
+class UserTipSuccess(Base):
+    __tablename__ = "user_tip_success"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    tip_id = Column(Integer, ForeignKey("tips.id"), nullable=False)
+    marked_at = Column(DateTime, default=now)
+
+    tip = relationship("Tip", back_populates="successes")
+
+    __table_args__ = (UniqueConstraint("user_id", "tip_id", name="uq_user_tip_success"),)
+
+
+class TipSuggestion(Base):
+    __tablename__ = "tip_suggestions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    title = Column(String, nullable=False)
+    description = Column(Text, nullable=False)
+    category = Column(String, nullable=False)
+    author_display_name = Column(String, nullable=False)
+    consent_public = Column(Boolean, default=False)
+    status = Column(String, default="pending")  # pending | approved | rejected
     created_at = Column(DateTime, default=now)
 
     user = relationship("User")

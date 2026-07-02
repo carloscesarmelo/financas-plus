@@ -1,3 +1,4 @@
+import datetime
 import os
 
 from fastapi import Depends, FastAPI, Request
@@ -10,7 +11,7 @@ from app.auth import NotAuthenticated, PlanRequired, require_user
 from app.database import Base, SessionLocal, engine, get_db
 from app.finance_logic import challenge_pace_status
 from app.gamification import compute_badges, current_streak
-from app.models import Challenge, User
+from app.models import Challenge, LearningContent, Tip, User
 from app.routers import (
     auth_router,
     challenges_router,
@@ -81,6 +82,10 @@ def dashboard(request: Request, user: User = Depends(require_user), db: Session 
         c for c in challenges if not pace_by_challenge[c.id]["is_completed"] and pace_by_challenge[c.id]["days_behind"] > 0
     ]
 
+    cutoff = datetime.datetime.utcnow() - datetime.timedelta(days=7)
+    new_tips = db.query(Tip).filter(Tip.created_at >= cutoff).order_by(Tip.created_at.desc()).all()
+    new_learn = db.query(LearningContent).filter(LearningContent.created_at >= cutoff).order_by(LearningContent.created_at.desc()).all()
+
     return templates.TemplateResponse(
         "dashboard.html",
         {
@@ -92,5 +97,7 @@ def dashboard(request: Request, user: User = Depends(require_user), db: Session 
             "xp_to_next_level": 100 - (user.xp % 100),
             "pace_by_challenge": pace_by_challenge,
             "pending_challenges": pending_challenges,
+            "new_tips": new_tips,
+            "new_learn": new_learn,
         },
     )

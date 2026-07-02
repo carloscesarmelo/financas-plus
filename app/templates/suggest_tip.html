@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Enviar Dica · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Compartilhe uma dica que funcionou pra você</div>
+<p class="page-subtitle">
+  Se uma estratégia de renda extra deu resultado na sua vida, compartilhe com a comunidade.
+  Nossa equipe vai revisar e publicar as melhores.
+</p>
+
+{% if success %}
+<div class="disclaimer">
+  <strong>Dica enviada com sucesso!</strong> Nossa equipe vai analisar em breve.
+  Se aprovada, você recebe <strong>+50 XP</strong> e seu nome aparece como autor.
+</div>
+<a class="btn btn-secondary" href="/tips">Voltar para Renda Extra</a>
+{% else %}
+<div class="card">
+  <form method="post" action="/tips/suggest">
+    <label for="title">Título da dica</label>
+    <input type="text" id="title" name="title" placeholder="Ex: Revenda de produtos no OLX" required />
+
+    <label for="description">Descreva a estratégia em detalhes</label>
+    <textarea id="description" name="description" rows="5"
+      placeholder="Explique como funciona, quanto você ganhou, quanto tempo levou..." required></textarea>
+
+    <label for="category">Categoria</label>
+    <select id="category" name="category" required>
+      {% for cat in categories %}
+      <option value="{{ cat }}">{{ cat }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="author_display_name">Como quer ser identificado?</label>
+    <input type="text" id="author_display_name" name="author_display_name"
+      placeholder="Ex: Carlos M., usuário FINANÇAS+" required />
+
+    <div class="suggest-consent">
+      <input type="checkbox" id="consent_public" name="consent_public" />
+      <label for="consent_public" class="suggest-consent-label">
+        Autorizo que meu nome apareça publicamente caso a dica seja aprovada.
+      </label>
+    </div>
+
+    <button class="btn" type="submit">Enviar minha dica</button>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

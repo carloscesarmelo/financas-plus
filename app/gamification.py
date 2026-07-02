@@ -15,6 +15,8 @@ XP_REWARDS = {
     "challenge_day_marked": 10,
     "learning_completed": 20,
     "tip_completed": 15,
+    "tip_suggestion_approved": 50,
+    "tip_success_marked": 5,
 }
 
 

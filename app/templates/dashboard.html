@@ -40,6 +40,31 @@
   </p>
 </div>
 
+{% if new_tips or new_learn %}
+<div class="card card-glow">
+  <div class="page-title" style="font-size: 1.2rem">Novidades desta semana</div>
+  {% for tip in new_tips %}
+  <div class="list-item">
+    <div>
+      <span class="tag">Renda Extra</span>
+      {% if tip.source == "community" %}<span class="tag dashboard-news-community">Comunidade</span>{% endif %}
+      <strong>{{ tip.title }}</strong>
+    </div>
+    <a class="btn btn-small btn-secondary" href="/tips">Ver</a>
+  </div>
+  {% endfor %}
+  {% for content in new_learn %}
+  <div class="list-item">
+    <div>
+      <span class="tag">{{ content.content_type }}</span>
+      <strong>{{ content.title }}</strong>
+    </div>
+    <a class="btn btn-small btn-secondary" href="/learn">Ver</a>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
 <div class="card">
   <div class="page-title" style="font-size: 1.2rem">Conquistas</div>
   <div class="badge-list">

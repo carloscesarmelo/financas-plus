@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Sugestões Pendentes · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Sugestões da Comunidade</div>
+<p class="page-subtitle">{{ suggestions|length }} sugestão(ões) aguardando análise.</p>
+
+<a class="btn btn-secondary" href="/admin/tips">+ Adicionar dica (admin)</a>
+
+{% if suggestions %}
+{% for s in suggestions %}
+<div class="card">
+  <div class="suggest-admin-header">
+    <div>
+      <span class="tag">{{ s.category }}</span>
+      {% if s.consent_public %}
+      <span class="tag tip-community-badge">Nome autorizado</span>
+      {% endif %}
+    </div>
+    <span class="page-subtitle">{{ s.created_at.strftime("%d/%m/%Y") }}</span>
+  </div>
+
+  <div class="tip-title">{{ s.title }}</div>
+  <p class="page-subtitle">{{ s.description }}</p>
+
+  <div class="suggest-admin-meta">
+    Enviado por: <strong>{{ s.user.name }}</strong>
+    · Nome público: <strong>{{ s.author_display_name }}</strong>
+    {% if not s.consent_public %}· <em>(não autorizou exposição pública do nome)</em>{% endif %}
+  </div>
+
+  <div class="suggest-admin-actions">
+    <form method="post" action="/admin/tips/suggestions/{{ s.id }}/approve">
+      <button class="btn btn-small" type="submit">Aprovar e publicar</button>
+    </form>
+    <form method="post" action="/admin/tips/suggestions/{{ s.id }}/reject">
+      <button class="btn btn-small btn-secondary" type="submit">Rejeitar</button>
+    </form>
+  </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card">
+  <p class="page-subtitle">Nenhuma sugestão pendente no momento.</p>
+</div>
+{% endif %}
+{% endblock %}

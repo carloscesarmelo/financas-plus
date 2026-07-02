@@ -1,26 +1,69 @@
 {% extends "base.html" %}
 {% block title %}Renda Extra · FINANÇAS+{% endblock %}
 {% block content %}
-<div class="page-title">Dicas de Como Fazer Dinheiro</div>
-<p class="page-subtitle">Roteiros práticos para gerar renda extra além do que você já faz.</p>
+<div class="page-title">Dicas de Renda Extra</div>
+<p class="page-subtitle">Roteiros práticos validados pela comunidade. As dicas com mais casos de sucesso aparecem primeiro.</p>
 
-{% if user.is_admin %}
-<a class="btn btn-secondary" href="/admin/tips">+ Adicionar dica (admin)</a>
-{% endif %}
+<div class="tips-actions">
+  <a class="btn" href="/tips/suggest">Enviar minha dica (+50 XP)</a>
+  {% if user.is_admin %}
+  <a class="btn btn-secondary" href="/admin/tips">+ Adicionar (admin)</a>
+  {% if pending_count > 0 %}
+  <a class="btn btn-secondary" href="/admin/tips/suggestions">
+    Sugestões pendentes <span class="tips-pending-badge">{{ pending_count }}</span>
+  </a>
+  {% endif %}
+  {% endif %}
+</div>
 
 <div class="grid grid-2">
-  {% for tip in tips %}
-  <div class="card">
-    <span class="tag">{{ tip.category }}</span>
-    <div class="page-title" style="font-size: 1.1rem">{{ tip.title }}</div>
-    <p class="page-subtitle">{{ tip.description }}</p>
-    {% if tip.id in completed_ids %}
-    <span class="nav-pill">Concluído</span>
-    {% else %}
-    <form method="post" action="/tips/{{ tip.id }}/complete">
-      <button class="btn btn-small" type="submit">Marcar como concluído</button>
-    </form>
+  {% for item in tips_data %}
+  {% set tip = item.tip %}
+  <div class="card tip-card">
+    <div class="tip-card-header">
+      <span class="tag">{{ tip.category }}</span>
+      {% if tip.source == "community" %}
+      <span class="tag tip-community-badge">Da comunidade</span>
+      {% endif %}
+    </div>
+
+    <div class="tip-title">{{ tip.title }}</div>
+
+    {% if tip.author_name %}
+    <div class="tip-author">por {{ tip.author_name }}</div>
     {% endif %}
+
+    <p class="page-subtitle">{{ tip.description }}</p>
+
+    <div class="tip-success-bar">
+      <span class="tip-success-count">
+        {% if item.success_count == 0 %}
+          Seja o primeiro a testar!
+        {% elif item.success_count == 1 %}
+          ⭐ 1 pessoa teve sucesso com essa dica
+        {% else %}
+          ⭐ {{ item.success_count }} pessoas tiveram sucesso com essa dica
+        {% endif %}
+      </span>
+    </div>
+
+    <div class="tip-actions">
+      {% if item.completed %}
+      <span class="nav-pill">✓ Concluída</span>
+      {% else %}
+      <form method="post" action="/tips/{{ tip.id }}/complete">
+        <button class="btn btn-small" type="submit">Marcar como concluída</button>
+      </form>
+      {% endif %}
+
+      {% if item.user_succeeded %}
+      <span class="nav-pill tip-success-pill">✓ Testei e deu certo!</span>
+      {% else %}
+      <form method="post" action="/tips/{{ tip.id }}/success">
+        <button class="btn btn-small btn-secondary" type="submit">Testei e deu certo! +5 XP</button>
+      </form>
+      {% endif %}
+    </div>
   </div>
   {% endfor %}
 </div>

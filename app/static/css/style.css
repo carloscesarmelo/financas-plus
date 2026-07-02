@@ -784,6 +784,128 @@ textarea:focus {
   color: var(--neon);
 }
 
+.tips-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.tips-pending-badge {
+  display: inline-block;
+  background: var(--danger);
+  color: #fff;
+  border-radius: 999px;
+  padding: 1px 7px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+.tip-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tip-card-header {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tip-community-badge {
+  background: var(--neon-soft);
+  color: var(--neon);
+  border-color: var(--neon-glow);
+}
+
+.tip-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.tip-author {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.tip-success-bar {
+  margin: 4px 0;
+}
+
+.tip-success-count {
+  font-size: 0.85rem;
+  color: var(--neon);
+  font-weight: 600;
+}
+
+.tip-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+  align-items: center;
+}
+
+.tip-success-pill {
+  background: var(--neon-soft);
+  color: var(--neon);
+  border-color: var(--neon-glow);
+}
+
+.suggest-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.suggest-consent input {
+  width: auto;
+  margin-top: 3px;
+  accent-color: var(--neon);
+}
+
+.suggest-consent-label {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.suggest-admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.suggest-admin-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 8px 0;
+}
+
+.suggest-admin-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.suggest-admin-actions form {
+  display: inline;
+}
+
+.dashboard-news-community {
+  background: var(--neon-soft);
+  color: var(--neon);
+}
+
 .auth-wrapper {
   max-width: 420px;
   margin: 80px auto;
