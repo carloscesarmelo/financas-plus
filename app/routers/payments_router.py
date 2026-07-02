@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models import PaymentEvent
+from app.models import PaymentEvent, User
 from app.payments import apply_kiwify_event
 
 router = APIRouter()
@@ -26,6 +26,24 @@ async def kiwify_webhook(request: Request, token: str | None = None, db: Session
     return {"received": True, "processed": event.processed}
 
 
+
+
+@router.post("/internal/make-admin")
+def make_admin(email: str, token: str | None = None, db: Session = Depends(get_db)):
+    _check_token(token)
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+    user.is_admin = True
+    db.commit()
+    return {"ok": True, "email": user.email, "is_admin": user.is_admin}
+
+
+@router.get("/internal/users-debug")
+def users_debug(token: str | None = None, db: Session = Depends(get_db)):
+    _check_token(token)
+    users = db.query(User).all()
+    return [{"id": u.id, "email": u.email, "is_admin": u.is_admin, "plan": u.plan, "plan_active": u.plan_active} for u in users]
 
 
 @router.get("/webhooks/kiwify/debug")
