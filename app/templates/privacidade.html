@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Política de Privacidade · FINANÇAS+{% endblock %}
+{% block content %}
+<div class="page-title">Política de Privacidade</div>
+<p class="page-subtitle">Última atualização: 01 de julho de 2026</p>
+
+<div class="card legal-card">
+  <p class="legal-intro">
+    O <strong>FINANÇAS+</strong> leva a sua privacidade a sério. Esta Política de Privacidade foi elaborada em
+    estrita conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD) para explicar com total
+    transparência como coletamos, usamos, armazenamos e protegemos suas informações.
+  </p>
+</div>
+
+<div class="card legal-card">
+  <h2 class="legal-section-title">1. Controlador de Dados</h2>
+  <p>
+    O controlador dos dados pessoais coletados é <strong>Antonio Guilherme Medeiros</strong>,
+    <span class="legal-placeholder">[Inserir CPF/CNPJ]</span>, operando no Brasil.
+    Para demandas relacionadas à privacidade, entre em contato via e-mail:
+    <span class="legal-placeholder">[Inserir e-mail de contato]</span>.
+  </p>
+</div>
+
+<div class="card legal-card">
+  <h2 class="legal-section-title">2. Dados que Coletamos e a Finalidade</h2>
+  <p>Coletamos apenas os dados estritamente necessários para o funcionamento e a gamificação da plataforma:</p>
+  <ul class="legal-list">
+    <li><strong>Dados de Cadastro:</strong> Nome completo e endereço de e-mail (usado como identificador e comunicação).</li>
+    <li><strong>Dados de Diagnóstico e Perfil:</strong> Renda mensal aproximada, status de dívidas, comportamento financeiro, habilidades pessoais e objetivos de vida. <em>Finalidade:</em> Gerar o score de saúde financeira, relatórios personalizados e histórico de evolução a cada 90 dias.</li>
+    <li><strong>Dados de Uso (Gamificação):</strong> Dias marcados nos tabuleiros, conteúdos consumidos, XP acumulado e badges. <em>Finalidade:</em> Operar o sistema de progressão do usuário.</li>
+    <li><strong>Dados de Pagamento (Logs):</strong> Recebemos via <em>webhook</em> da Kiwify apenas seu e-mail, nome do produto e status da transação. <strong>Não armazenamos dados bancários ou de cartão de crédito.</strong></li>
+    <li><strong>Dados Técnicos:</strong> Endereço IP (processado temporariamente pelo servidor, não armazenado) para fins de segurança. Não utilizamos cookies de rastreamento de terceiros ou pixels de publicidade.</li>
+  </ul>
+</div>
+
+<div class="card legal-card">
+  <h2 class="legal-section-title">3. Compartilhamento de Dados com Terceiros</h2>
+  <p>O FINANÇAS+ <strong>não vende, não aluga e não compartilha</strong> seus dados pessoais para fins publicitários. O compartilhamento ocorre exclusivamente com parceiros tecnológicos essenciais para a operação:</p>
+  <ul class="legal-list">
+    <li><strong>Kiwify:</strong> Para viabilizar o processamento seguro do pagamento da sua assinatura.</li>
+    <li><strong>Railway:</strong> Provedor de infraestrutura em nuvem (localizado nos EUA) onde nosso banco de dados e a aplicação estão hospedados sob rígidos protocolos de segurança.</li>
+  </ul>
+</div>
+
+<div class="card legal-card">
+  <h2 class="legal-section-title">4. Segurança da Informação</h2>
+  <p>Implementamos as melhores práticas de engenharia de software para proteger seus dados:</p>
+  <ul class="legal-list">
+    <li>As senhas são armazenadas utilizando criptografia irreversível (<em>hash bcrypt</em>).</li>
+    <li>A comunicação entre seu navegador e nossos servidores é totalmente protegida por criptografia HTTPS.</li>
+    <li>As sessões de login utilizam cookies seguros (<code>httpOnly</code>, <code>samesite=lax</code>).</li>
+    <li>Tokens de recuperação de senha têm validade máxima de 24 horas e são destruídos após o uso.</li>
+  </ul>
+</div>
+
+<div class="card legal-card">
+  <h2 class="legal-section-title">5. Dicas da Comunidade</h2>
+  <p>Caso você decida submeter uma dica de renda extra para ser exibida publicamente na plataforma, solicitaremos seu <strong>consentimento explícito</strong> para exibir seu nome associado à dica. Você pode revogar esse consentimento a qualquer momento nas configurações do seu perfil.</p>
+</div>
+
+<div class="card legal-card">
+  <h2 class="legal-section-title">6. Seus Direitos (LGPD)</h2>
+  <p>Você tem controle total sobre os seus dados. A qualquer momento, você pode solicitar através do nosso canal de contato:</p>
+  <ol class="legal-list">
+    <li>Confirmação da existência de tratamento e acesso aos dados.</li>
+    <li>Correção de dados incompletos, inexatos ou desatualizados.</li>
+    <li>Exclusão completa e definitiva da sua conta e de todo o seu histórico no banco de dados.</li>
+    <li>Revogação de consentimentos fornecidos anteriormente.</li>
+  </ol>
+  <p class="legal-paragraph">Para exercer qualquer um desses direitos, entre em contato pelo e-mail: <span class="legal-placeholder">[Inserir e-mail de contato]</span></p>
+</div>
+{% endblock %}

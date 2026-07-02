@@ -1025,6 +1025,92 @@ textarea:focus {
   min-width: 0;
 }
 
+.legal-card {
+  margin-bottom: 16px;
+}
+
+.legal-card p {
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.legal-intro {
+  margin-bottom: 12px;
+}
+
+.legal-paragraph {
+  margin-top: 12px;
+}
+
+.legal-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--neon);
+  margin-bottom: 12px;
+}
+
+.legal-list {
+  padding-left: 20px;
+  color: var(--text);
+  line-height: 1.8;
+}
+
+.legal-list li {
+  margin-bottom: 6px;
+}
+
+.legal-list code {
+  background: var(--bg-elevated);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  color: var(--neon);
+}
+
+.legal-placeholder {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.legal-footer {
+  text-align: center;
+  padding: 24px 0 8px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.legal-footer a {
+  color: var(--text-muted);
+}
+
+.legal-footer a:hover {
+  color: var(--neon);
+}
+
+.site-footer {
+  text-align: center;
+  padding: 20px 24px;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.site-footer a {
+  color: var(--text-muted);
+}
+
+.site-footer a:hover {
+  color: var(--neon);
+}
+
 .auth-wrapper {
   max-width: 420px;
   margin: 80px auto;

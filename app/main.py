@@ -18,6 +18,7 @@ from app.routers import (
     challenges_router,
     diagnostico_router,
     learning_router,
+    legal_router,
     onboarding_router,
     payments_router,
     plans_router,
@@ -35,6 +36,7 @@ templates = Jinja2Templates(directory="app/templates")
 
 app.include_router(admin_router.router)
 app.include_router(auth_router.router)
+app.include_router(legal_router.router)
 app.include_router(onboarding_router.router)
 app.include_router(diagnostico_router.router)
 app.include_router(payments_router.router)

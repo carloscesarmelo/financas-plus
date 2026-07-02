@@ -41,6 +41,16 @@
     {% block content %}{% endblock %}
   </div>
 
+  {% if user %}
+  <footer class="site-footer">
+    <a href="/termos">Termos de Uso</a>
+    <span>·</span>
+    <a href="/privacidade">Política de Privacidade</a>
+    <span>·</span>
+    <span>© 2026 FINANÇAS+</span>
+  </footer>
+  {% endif %}
+
   {% block scripts %}{% endblock %}
 </body>
 </html>
