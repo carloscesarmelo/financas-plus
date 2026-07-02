@@ -76,6 +76,10 @@ def login_submit(
             status_code=400,
         )
 
+    if not user.is_admin and _is_admin_email(email_normalized):
+        user.is_admin = True
+        db.commit()
+
     request.session["user_id"] = user.id
     if not user.onboarding_completed:
         return RedirectResponse("/onboarding", status_code=303)
