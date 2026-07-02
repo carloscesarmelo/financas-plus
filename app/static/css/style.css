@@ -1067,6 +1067,10 @@ textarea:focus {
   color: var(--neon);
 }
 
+.legal-disclaimer {
+  margin-top: 16px;
+}
+
 .legal-placeholder {
   color: var(--danger);
   font-weight: 600;
