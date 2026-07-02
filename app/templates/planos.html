@@ -7,6 +7,11 @@
 <div class="disclaimer">
   <strong>Você já é assinante do plano {{ plan_label }}.</strong>
   Aproveite os Desafios de Poupança, o Aprender e as Dicas de Renda Extra.
+  {% if user.plan_expires_at %}
+  <br>Seu plano expira em <strong>{{ user.plan_expires_at.strftime("%d/%m/%Y") }}</strong>.
+  {% else %}
+  <br>Seu acesso é <strong>vitalício</strong> — sem data de expiração.
+  {% endif %}
 </div>
 {% else %}
 <p class="page-subtitle">

@@ -40,6 +40,8 @@ class User(Base):
     plan = Column(String, default="free")  # free, mensal, anual, vitalicio
     plan_active = Column(Boolean, default=False)
     plan_expires_at = Column(DateTime, nullable=True)  # null = sem expiração (vitalicio)
+    reset_token = Column(String, nullable=True)
+    reset_token_at = Column(DateTime, nullable=True)
 
     onboarding = relationship("OnboardingProfile", uselist=False, back_populates="user")
     challenges = relationship("Challenge", back_populates="user")

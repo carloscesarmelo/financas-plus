@@ -1,4 +1,7 @@
 import os
+import secrets
+
+import datetime
 
 from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import RedirectResponse
@@ -90,3 +93,56 @@ def login_submit(
 def logout(request: Request):
     request.session.clear()
     return RedirectResponse("/login", status_code=303)
+
+
+@router.get("/forgot-password")
+def forgot_password_form(request: Request):
+    return templates.TemplateResponse("forgot_password.html", {"request": request, "user": None})
+
+
+@router.post("/forgot-password")
+def forgot_password_submit(
+    request: Request,
+    email: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    user = db.query(User).filter(User.email == email.strip().lower()).first()
+    if user:
+        token = secrets.token_urlsafe(32)
+        user.reset_token = token
+        user.reset_token_at = datetime.datetime.utcnow()
+        db.commit()
+    return templates.TemplateResponse(
+        "forgot_password.html", {"request": request, "user": None, "submitted": True}
+    )
+
+
+@router.get("/reset-password")
+def reset_password_form(request: Request, token: str = ""):
+    return templates.TemplateResponse(
+        "reset_password.html", {"request": request, "user": None, "token": token, "error": None}
+    )
+
+
+@router.post("/reset-password")
+def reset_password_submit(
+    request: Request,
+    token: str = Form(...),
+    password: str = Form(...),
+    db: Session = Depends(get_db),
+):
+    expiry = datetime.datetime.utcnow() - datetime.timedelta(hours=24)
+    user = db.query(User).filter(
+        User.reset_token == token,
+        User.reset_token_at >= expiry,
+    ).first()
+    if not user:
+        return templates.TemplateResponse(
+            "reset_password.html",
+            {"request": request, "user": None, "token": token, "error": "Link inválido ou expirado."},
+        )
+    user.password_hash = hash_password(password)
+    user.reset_token = None
+    user.reset_token_at = None
+    db.commit()
+    return RedirectResponse("/login?msg=senha_redefinida", status_code=303)

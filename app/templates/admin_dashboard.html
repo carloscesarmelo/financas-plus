@@ -36,7 +36,28 @@
     Sugestões pendentes <span class="tips-pending-badge">{{ stats.pending_suggestions }}</span>
   </a>
   {% endif %}
+  <a class="btn btn-secondary" href="/admin/backup-db">⬇ Baixar backup do banco</a>
 </div>
+
+{% if pending_resets %}
+<div class="card">
+  <div class="admin-card-title">Solicitações de redefinição de senha</div>
+  <p class="page-subtitle">Envie o link abaixo para o usuário pelo Instagram ou e-mail.</p>
+  {% for u in pending_resets %}
+  <div class="list-item">
+    <div>
+      <strong>{{ u.name }}</strong>
+      <div class="tip-author">{{ u.email }}</div>
+    </div>
+    <div class="admin-reset-link">
+      <input class="reset-link-input" type="text" readonly
+        title="Link de redefinição de senha"
+        value="https://financas-plus-production.up.railway.app/reset-password?token={{ u.reset_token }}" />
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
 
 <div class="page-subtitle admin-section-label">Usuários</div>
 <div class="grid grid-3">

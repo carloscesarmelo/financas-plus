@@ -1,7 +1,8 @@
 import datetime
+import os
 
 from fastapi import APIRouter, Depends, Form, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import FileResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
@@ -68,6 +69,12 @@ def admin_dashboard(request: Request, user: User = Depends(require_admin), db: S
         .all()
     )
 
+    pending_resets = (
+        db.query(User)
+        .filter(User.reset_token.isnot(None))
+        .all()
+    )
+
     grant_message = request.query_params.get("msg")
 
     return templates.TemplateResponse(
@@ -95,7 +102,21 @@ def admin_dashboard(request: Request, user: User = Depends(require_admin), db: S
             "top_tips_data": top_tips_data,
             "recent_users": recent_users,
             "grant_message": grant_message,
+            "pending_resets": pending_resets,
         },
+    )
+
+
+@router.get("/admin/backup-db")
+def backup_db(user: User = Depends(require_admin)):
+    db_path = os.environ.get("DATABASE_URL", "").replace("sqlite:////", "/").replace("sqlite:///", "")
+    if not db_path or not os.path.exists(db_path):
+        db_path = "./data/financas.db"
+    timestamp = datetime.datetime.utcnow().strftime("%Y%m%d_%H%M%S")
+    return FileResponse(
+        path=db_path,
+        media_type="application/octet-stream",
+        filename=f"financas_backup_{timestamp}.db",
     )
 
 

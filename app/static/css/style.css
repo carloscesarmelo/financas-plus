@@ -958,6 +958,27 @@ textarea:focus {
   margin-bottom: 0;
 }
 
+.admin-reset-link {
+  flex: 1;
+  max-width: 500px;
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.auth-links {
+  margin-top: 20px;
+}
+
+.reset-link-input {
+  font-size: 0.75rem;
+  color: var(--neon);
+  background: var(--bg-elevated);
+  border-color: var(--neon-glow);
+  cursor: text;
+}
+
 .admin-user-meta {
   display: flex;
   align-items: center;

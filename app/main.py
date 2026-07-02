@@ -61,6 +61,8 @@ def _run_migrations():
         "ALTER TABLE users ADD COLUMN plan TEXT DEFAULT 'free'",
         "ALTER TABLE users ADD COLUMN plan_active INTEGER DEFAULT 0",
         "ALTER TABLE users ADD COLUMN plan_expires_at TIMESTAMP",
+        "ALTER TABLE users ADD COLUMN reset_token TEXT",
+        "ALTER TABLE users ADD COLUMN reset_token_at TIMESTAMP",
     ]
     with engine.connect() as conn:
         for sql in migrations:
