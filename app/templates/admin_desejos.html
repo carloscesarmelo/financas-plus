@@ -9,9 +9,53 @@
   <form method="post" action="/admin/desejos" class="desejo-form">
     <div class="desejo-form-grid">
       <div>
-        <label for="emoji">Emoji (cole aqui)</label>
-        <input type="text" id="emoji" name="emoji" placeholder="🏠" maxlength="10"
-          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" required />
+        <label>Emoji</label>
+        <div class="emoji-picker-wrapper">
+          <input type="text" id="emoji" name="emoji" placeholder="🏠" maxlength="10"
+            autocomplete="off" spellcheck="false" readonly required />
+          <button type="button" class="btn btn-small btn-secondary emoji-toggle-btn"
+            onclick="document.getElementById('emoji-panel').classList.toggle('hidden')">
+            Escolher ▾
+          </button>
+        </div>
+        <div id="emoji-panel" class="emoji-panel hidden">
+          <div class="emoji-group-label">Moradia &amp; Bens</div>
+          <div class="emoji-grid">
+            {% for e in ["🏠","🏡","🏢","🏗️","🏘️","🛋️","🏊","🪑","🛁","🚿"] %}
+            <button type="button" class="emoji-opt" onclick="pickEmoji('{{ e }}')">{{ e }}</button>
+            {% endfor %}
+          </div>
+          <div class="emoji-group-label">Veículos &amp; Viagens</div>
+          <div class="emoji-grid">
+            {% for e in ["🚗","🚙","🏍️","🛵","✈️","🚢","🚁","🛻","🚕","🚌"] %}
+            <button type="button" class="emoji-opt" onclick="pickEmoji('{{ e }}')">{{ e }}</button>
+            {% endfor %}
+          </div>
+          <div class="emoji-group-label">Finanças &amp; Negócios</div>
+          <div class="emoji-grid">
+            {% for e in ["💰","💵","💳","💎","🏦","💼","📈","🪙","💸","🤝"] %}
+            <button type="button" class="emoji-opt" onclick="pickEmoji('{{ e }}')">{{ e }}</button>
+            {% endfor %}
+          </div>
+          <div class="emoji-group-label">Família &amp; Saúde</div>
+          <div class="emoji-grid">
+            {% for e in ["👶","🤱","💊","🏥","🦷","❤️","👨‍👩‍👧","🧸","🎒","🌱"] %}
+            <button type="button" class="emoji-opt" onclick="pickEmoji('{{ e }}')">{{ e }}</button>
+            {% endfor %}
+          </div>
+          <div class="emoji-group-label">Conquistas &amp; Celebrações</div>
+          <div class="emoji-grid">
+            {% for e in ["🎯","🎉","💍","🎓","🌍","🏆","🥇","🌟","🎪","🎸"] %}
+            <button type="button" class="emoji-opt" onclick="pickEmoji('{{ e }}')">{{ e }}</button>
+            {% endfor %}
+          </div>
+          <div class="emoji-group-label">Segurança &amp; Proteção</div>
+          <div class="emoji-grid">
+            {% for e in ["🛟","🔒","🛡️","🏋️","📦","🗝️","⚓","🧲","🔧","📋"] %}
+            <button type="button" class="emoji-opt" onclick="pickEmoji('{{ e }}')">{{ e }}</button>
+            {% endfor %}
+          </div>
+        </div>
       </div>
       <div>
         <label for="label">Nome curto</label>
@@ -53,7 +97,7 @@
         </button>
       </form>
       <form method="post" action="/admin/desejos/{{ d.id }}/delete">
-        <button class="btn btn-small" style="background: var(--danger)" type="submit"
+        <button class="btn btn-small btn-danger" type="submit"
           onclick="return confirm('Excluir {{ d.label }}?')">Excluir</button>
       </form>
     </div>
@@ -62,4 +106,13 @@
 </div>
 
 <a class="btn btn-secondary" href="/admin">← Voltar ao painel</a>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function pickEmoji(emoji) {
+  document.getElementById("emoji").value = emoji;
+  document.getElementById("emoji-panel").classList.add("hidden");
+}
+</script>
 {% endblock %}

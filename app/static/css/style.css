@@ -671,6 +671,77 @@ textarea:focus {
   font-weight: 600;
 }
 
+.emoji-picker-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.emoji-picker-wrapper input {
+  flex: 1;
+  text-align: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+}
+
+.emoji-toggle-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.emoji-panel {
+  margin-top: 8px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  grid-column: 1 / -1;
+}
+
+.emoji-group-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 10px 0 6px;
+}
+
+.emoji-group-label:first-child {
+  margin-top: 0;
+}
+
+.emoji-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.emoji-opt {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s ease, border-color 0.1s ease;
+  line-height: 1;
+}
+
+.emoji-opt:hover {
+  background: var(--neon-soft);
+  border-color: var(--neon-glow);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+  border: none;
+}
+
 .desejo-form-grid {
   display: grid;
   grid-template-columns: 80px 1fr 160px;
