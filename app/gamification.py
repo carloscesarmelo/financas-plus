@@ -9,7 +9,7 @@ from app.models import (
     UserTipProgress,
 )
 
-XP_PER_LEVEL = 100
+XP_PER_LEVEL = 100  # mantido para compatibilidade de campo; cálculo real usa LEVELS abaixo
 
 XP_REWARDS = {
     "challenge_day_marked": 10,
@@ -19,6 +19,59 @@ XP_REWARDS = {
     "tip_success_marked": 5,
 }
 
+LEVELS = [
+    {"level": 1,  "name": "Desperto",              "emoji": "🌱", "xp_min": 0,      "description": "Você deu o primeiro passo rumo à sua liberdade financeira."},
+    {"level": 2,  "name": "Curioso",               "emoji": "🔍", "xp_min": 100,    "description": "Está explorando o universo das finanças com interesse real."},
+    {"level": 3,  "name": "Consciente",             "emoji": "💡", "xp_min": 250,    "description": "Sabe onde está e para onde quer chegar."},
+    {"level": 4,  "name": "Organizado",             "emoji": "📋", "xp_min": 450,    "description": "Tem controle sobre suas entradas e saídas."},
+    {"level": 5,  "name": "Disciplinado",           "emoji": "🎯", "xp_min": 700,    "description": "Segue seu plano com consistência dia a dia."},
+    {"level": 6,  "name": "Poupador",               "emoji": "🏦", "xp_min": 1000,   "description": "Constrói reservas com regularidade e propósito."},
+    {"level": 7,  "name": "Planejador",             "emoji": "📊", "xp_min": 1400,   "description": "Pensa o futuro com estratégia e visão."},
+    {"level": 8,  "name": "Controlador",            "emoji": "⚙️", "xp_min": 1900,   "description": "Domina completamente seu fluxo de caixa."},
+    {"level": 9,  "name": "Estrategista",           "emoji": "🧠", "xp_min": 2500,   "description": "Toma decisões financeiras calculadas e conscientes."},
+    {"level": 10, "name": "Investidor",             "emoji": "📈", "xp_min": 3200,   "description": "Seu dinheiro já começa a trabalhar por você."},
+    {"level": 11, "name": "Multiplicador",          "emoji": "🔥", "xp_min": 4100,   "description": "Escala seus resultados e multiplica oportunidades."},
+    {"level": 12, "name": "Construtor",             "emoji": "🏗️", "xp_min": 5200,   "description": "Edifica patrimônio sólido e duradouro."},
+    {"level": 13, "name": "Blindado",               "emoji": "🛡️", "xp_min": 6500,   "description": "Protege e expande o que conquistou com inteligência."},
+    {"level": 14, "name": "Empreendedor",           "emoji": "💼", "xp_min": 8000,   "description": "Cria e gerencia múltiplas fontes de renda."},
+    {"level": 15, "name": "Livre",                  "emoji": "🗝️", "xp_min": 9800,   "description": "Suas escolhas de vida não são mais limitadas pelo dinheiro."},
+    {"level": 16, "name": "Independente",           "emoji": "🌟", "xp_min": 12000,  "description": "Alcançou a independência financeira. Você é a prova de que é possível."},
+]
+
+
+def get_level_info(xp: int) -> dict:
+    """Retorna os dados completos do nível atual e do próximo para um dado XP."""
+    current = LEVELS[0]
+    for lvl in LEVELS:
+        if xp >= lvl["xp_min"]:
+            current = lvl
+        else:
+            break
+
+    current_idx = current["level"] - 1
+    next_lvl = LEVELS[current_idx + 1] if current_idx + 1 < len(LEVELS) else None
+
+    if next_lvl:
+        xp_in_level = xp - current["xp_min"]
+        xp_needed = next_lvl["xp_min"] - current["xp_min"]
+        pct = int(xp_in_level / xp_needed * 100)
+        xp_to_next = next_lvl["xp_min"] - xp
+    else:
+        xp_in_level = xp - current["xp_min"]
+        xp_needed = xp_in_level if xp_in_level > 0 else 1
+        pct = 100
+        xp_to_next = 0
+
+    return {
+        "level": current["level"],
+        "name": current["name"],
+        "emoji": current["emoji"],
+        "description": current["description"],
+        "next": next_lvl,
+        "pct": pct,
+        "xp_to_next": xp_to_next,
+    }
+
 
 def award_xp(db: Session, user: User, event_type: str, description: str = "") -> int:
     xp_amount = XP_REWARDS.get(event_type, 0)
@@ -26,7 +79,8 @@ def award_xp(db: Session, user: User, event_type: str, description: str = "") ->
         return user.xp
 
     user.xp += xp_amount
-    user.level = (user.xp // XP_PER_LEVEL) + 1
+    info = get_level_info(user.xp)
+    user.level = info["level"]
 
     db.add(
         GamificationEvent(

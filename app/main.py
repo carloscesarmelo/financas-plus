@@ -10,7 +10,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from app.auth import NotAuthenticated, PlanRequired, require_user
 from app.database import Base, SessionLocal, engine, get_db
 from app.finance_logic import challenge_pace_status
-from app.gamification import compute_badges, current_streak
+from app.gamification import compute_badges, current_streak, get_level_info
 from app.models import Challenge, Desejo, LearningContent, Tip, User
 from app.routers import (
     admin_router,
@@ -30,9 +30,21 @@ from sqlalchemy.orm import Session
 
 app = FastAPI(title="FINANÇAS+")
 
+from app.gamification import LEVELS as _LEVELS  # noqa: E402
+
+def _level_name(xp: int) -> str:
+    name = _LEVELS[0]["name"]
+    for lvl in _LEVELS:
+        if xp >= lvl["xp_min"]:
+            name = lvl["name"]
+        else:
+            break
+    return name
+
 app.add_middleware(SessionMiddleware, secret_key=os.environ.get("SECRET_KEY", "dev-secret-key"))
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
+templates.env.globals["level_name"] = _level_name
 
 app.include_router(admin_router.router)
 app.include_router(auth_router.router)
@@ -104,6 +116,7 @@ def dashboard(request: Request, user: User = Depends(require_user), db: Session 
     )
     badges = compute_badges(db, user)
     streak = current_streak(db, user)
+    level_info = get_level_info(user.xp)
 
     pace_by_challenge = {c.id: challenge_pace_status(c) for c in challenges}
     pending_challenges = [
@@ -137,7 +150,8 @@ def dashboard(request: Request, user: User = Depends(require_user), db: Session 
             "challenges": challenges,
             "badges": badges,
             "streak": streak,
-            "xp_to_next_level": 100 - (user.xp % 100),
+            "xp_to_next_level": level_info["xp_to_next"],
+            "level_info": level_info,
             "pace_by_challenge": pace_by_challenge,
             "pending_challenges": pending_challenges,
             "new_tips": new_tips,

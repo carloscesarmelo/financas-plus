@@ -28,7 +28,7 @@
       {% if user.is_admin %}
       <a href="/admin" class="nav-pill nav-pill-admin">Admin</a>
       {% endif %}
-      <span class="nav-pill">Nível {{ user.level }} · {{ user.xp }} XP</span>
+      <span class="nav-pill">{{ level_name(user.xp) }} · {{ user.xp }} XP</span>
       {% if not user.plan_active %}
       <a href="/planos" class="nav-pill nav-pill-free">Free</a>
       {% endif %}

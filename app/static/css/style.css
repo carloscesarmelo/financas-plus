@@ -1348,6 +1348,72 @@ textarea:focus {
   color: var(--neon);
 }
 
+.level-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.level-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.level-banner-emoji {
+  font-size: 2.8rem;
+  line-height: 1;
+}
+
+.level-banner-name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--neon);
+}
+
+.level-banner-num {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.level-banner-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  max-width: 400px;
+}
+
+.level-banner-xp {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--neon);
+  white-space: nowrap;
+}
+
+.level-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.level-next-name {
+  font-size: 0.85rem;
+  color: var(--neon);
+  font-weight: 600;
+}
+
+.level-progress-sub {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
 .neon-text {
   color: var(--neon);
 }

@@ -42,9 +42,21 @@
 </div>
 {% endif %}
 
+<div class="level-banner card card-glow">
+  <div class="level-banner-left">
+    <div class="level-banner-emoji">{{ level_info.emoji }}</div>
+    <div>
+      <div class="level-banner-name">{{ level_info.name }}</div>
+      <div class="level-banner-num">Nível {{ level_info.level }}</div>
+      <div class="level-banner-desc">{{ level_info.description }}</div>
+    </div>
+  </div>
+  <div class="level-banner-xp">{{ user.xp }} XP</div>
+</div>
+
 <div class="grid grid-3">
   <div class="card metric">
-    <div class="value">{{ user.level }}</div>
+    <div class="value">{{ level_info.level }}</div>
     <div class="label">Nível atual</div>
   </div>
   <div class="card metric">
@@ -58,12 +70,23 @@
 </div>
 
 <div class="card">
-  <div class="page-subtitle" style="margin-bottom: 8px">Progresso até o próximo nível</div>
-  <div class="progress-bar">
-    <div class="progress-bar-fill" style="width: {{ 100 - xp_to_next_level }}%"></div>
+  <div class="level-progress-header">
+    <span class="page-subtitle">Progresso até o próximo nível</span>
+    {% if level_info.next %}
+    <span class="level-next-name">{{ level_info.next.emoji }} {{ level_info.next.name }}</span>
+    {% else %}
+    <span class="level-next-name">🌟 Nível máximo atingido!</span>
+    {% endif %}
   </div>
-  <p class="page-subtitle" style="margin-top: 8px; margin-bottom: 0">
-    Faltam {{ xp_to_next_level }} XP para o nível {{ user.level + 1 }}
+  <div class="progress-bar">
+    <div class="progress-bar-fill" style="width: {{ level_info.pct }}%"></div>
+  </div>
+  <p class="level-progress-sub">
+    {% if level_info.next %}
+    Faltam {{ level_info.xp_to_next }} XP para alcançar <strong>{{ level_info.next.name }}</strong>
+    {% else %}
+    Você alcançou o nível máximo — continue acumulando XP!
+    {% endif %}
   </p>
 </div>
 
