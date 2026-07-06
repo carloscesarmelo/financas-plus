@@ -28,7 +28,12 @@
       {% if user.is_admin %}
       <a href="/admin" class="nav-pill nav-pill-admin">Admin</a>
       {% endif %}
-      <span class="nav-pill">{{ level_name(user.xp) }} · {{ user.xp }} XP</span>
+      {% set _xp_mins = [0,100,250,450,700,1000,1400,1900,2500,3200,4100,5200,6500,8000,9800,12000] %}
+      {% set _names = ["Desperto","Curioso","Consciente","Organizado","Disciplinado","Poupador","Planejador","Controlador","Estrategista","Investidor","Multiplicador","Construtor","Blindado","Empreendedor","Livre","Independente"] %}
+      {% set _emojis = ["🌱","🔍","💡","📋","🎯","🏦","📊","⚙️","🧠","📈","🔥","🏗️","🛡️","💼","🗝️","🌟"] %}
+      {% set ns = namespace(idx=0) %}
+      {% for xm in _xp_mins %}{% if user.xp >= xm %}{% set ns.idx = loop.index0 %}{% endif %}{% endfor %}
+      <span class="nav-pill">{{ _emojis[ns.idx] }} {{ _names[ns.idx] }} · {{ user.xp }} XP</span>
       {% if not user.plan_active %}
       <a href="/planos" class="nav-pill nav-pill-free">Free</a>
       {% endif %}

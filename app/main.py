@@ -30,21 +30,9 @@ from sqlalchemy.orm import Session
 
 app = FastAPI(title="FINANÇAS+")
 
-from app.gamification import LEVELS as _LEVELS  # noqa: E402
-
-def _level_name(xp: int) -> str:
-    name = _LEVELS[0]["name"]
-    for lvl in _LEVELS:
-        if xp >= lvl["xp_min"]:
-            name = lvl["name"]
-        else:
-            break
-    return name
-
 app.add_middleware(SessionMiddleware, secret_key=os.environ.get("SECRET_KEY", "dev-secret-key"))
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
-templates.env.globals["level_name"] = _level_name
 
 app.include_router(admin_router.router)
 app.include_router(auth_router.router)
