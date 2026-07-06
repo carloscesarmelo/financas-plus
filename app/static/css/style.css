@@ -675,6 +675,7 @@ textarea:focus {
   display: flex;
   gap: 8px;
   align-items: center;
+  position: relative;
 }
 
 .emoji-picker-wrapper input {
@@ -690,12 +691,16 @@ textarea:focus {
 }
 
 .emoji-panel {
-  margin-top: 8px;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 100;
+  width: 480px;
   background: var(--bg-elevated);
-  border: 1px solid var(--border);
+  border: 1px solid var(--neon-glow);
   border-radius: 12px;
-  padding: 12px;
-  grid-column: 1 / -1;
+  padding: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
 .emoji-group-label {
