@@ -23,6 +23,17 @@
       <span class="desejo-label">{{ d.label }}</span>
     </button>
     {% endfor %}
+    <button type="button" class="desejo-card" data-goal="custom"
+      data-headline="Seu sonho em dias contados. Veja como."
+      data-subheadline="Você define o objetivo, nós ajudamos a chegar lá. Faça seu diagnóstico gratuito e monte seu plano personalizado.">
+      <span class="desejo-emoji">✏️</span>
+      <span class="desejo-label">Outro desejo...</span>
+    </button>
+  </div>
+
+  <div id="custom-desejo-wrapper" class="custom-desejo-wrapper hidden">
+    <input type="text" id="custom-desejo-input" class="custom-desejo-input"
+      placeholder="Digite seu objetivo aqui..." autocomplete="off" />
   </div>
 
   <h1 class="hero-headline" id="hero-headline">{{ desejos[0].headline if desejos else "Seu sonho em dias. Veja como." }}</h1>
@@ -30,6 +41,7 @@
     {{ desejos[0].subheadline if desejos else "" }}
   </p>
   <a class="btn" id="hero-cta" href="/register">Fazer meu diagnóstico gratuito</a>
+  <input type="hidden" id="desejo-selecionado" value="{{ desejos[0].label if desejos else '' }}" />
 
   <div class="hero-mock">
     <div class="card center-text">

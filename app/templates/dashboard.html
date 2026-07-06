@@ -4,6 +4,33 @@
 <div class="page-title">Olá, {{ user.name.split(" ")[0] }} 👋</div>
 <p class="page-subtitle">Seu Objetivo Maior: <strong style="color: var(--neon)">{{ user.objetivo_maior or "ainda não definido" }}</strong></p>
 
+{% if challenge_counters %}
+<div class="dash-counters">
+  {% for item in challenge_counters %}
+  <a href="/challenges/{{ item.challenge.id }}" class="dash-counter-card">
+    <div class="dash-counter-header">
+      <span class="dash-counter-title">🎯 {{ item.challenge.objetivo_maior or item.challenge.plan_key }}</span>
+      <span class="dash-counter-pct">{{ item.pct }}%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" style="width: {{ item.pct }}%"></div>
+    </div>
+    <div class="dash-counter-stats">
+      <span>✅ {{ item.marked }} dias marcados</span>
+      <span>📅 {{ item.remaining }} dias restantes</span>
+    </div>
+  </a>
+  {% endfor %}
+  <a href="/challenges" class="dash-counter-new">
+    <span>+ Novo desafio</span>
+  </a>
+</div>
+{% else %}
+<a href="/challenges" class="dash-no-challenge">
+  🎯 Nenhum desafio ativo — <strong>começar agora</strong>
+</a>
+{% endif %}
+
 {% if pending_challenges %}
 <div class="disclaimer">
   <strong>Sem problema, dá pra recuperar:</strong>

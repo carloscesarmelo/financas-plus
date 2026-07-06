@@ -110,6 +110,21 @@ def dashboard(request: Request, user: User = Depends(require_user), db: Session 
         c for c in challenges if not pace_by_challenge[c.id]["is_completed"] and pace_by_challenge[c.id]["days_behind"] > 0
     ]
 
+    active_challenges = [c for c in challenges if not pace_by_challenge[c.id]["is_completed"]]
+    challenge_counters = []
+    for c in active_challenges[:3]:
+        marked = sum(1 for d in c.days if d.marked)
+        total = c.total_days
+        remaining = total - marked
+        pct = int(marked / total * 100) if total else 0
+        challenge_counters.append({
+            "challenge": c,
+            "marked": marked,
+            "total": total,
+            "remaining": remaining,
+            "pct": pct,
+        })
+
     cutoff = datetime.datetime.utcnow() - datetime.timedelta(days=7)
     new_tips = db.query(Tip).filter(Tip.created_at >= cutoff).order_by(Tip.created_at.desc()).all()
     new_learn = db.query(LearningContent).filter(LearningContent.created_at >= cutoff).order_by(LearningContent.created_at.desc()).all()
@@ -127,5 +142,6 @@ def dashboard(request: Request, user: User = Depends(require_user), db: Session 
             "pending_challenges": pending_challenges,
             "new_tips": new_tips,
             "new_learn": new_learn,
+            "challenge_counters": challenge_counters,
         },
     )

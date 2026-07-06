@@ -23,8 +23,8 @@ templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/register")
-def register_form(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request, "error": None})
+def register_form(request: Request, desejo: str = ""):
+    return templates.TemplateResponse("register.html", {"request": request, "error": None, "desejo": desejo})
 
 
 @router.post("/register")
@@ -33,6 +33,7 @@ def register_submit(
     name: str = Form(...),
     email: str = Form(...),
     password: str = Form(...),
+    desejo: str = Form(""),
     db: Session = Depends(get_db),
 ):
     email_normalized = email.strip().lower()
@@ -54,7 +55,10 @@ def register_submit(
     db.commit()
     db.refresh(user)
 
+    request.session.clear()
     request.session["user_id"] = user.id
+    if desejo.strip():
+        request.session["desejo"] = desejo.strip()
     return RedirectResponse("/onboarding", status_code=303)
 
 
@@ -83,6 +87,7 @@ def login_submit(
         user.is_admin = True
         db.commit()
 
+    request.session.clear()
     request.session["user_id"] = user.id
     if not user.onboarding_completed:
         return RedirectResponse("/onboarding", status_code=303)

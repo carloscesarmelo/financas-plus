@@ -3,9 +3,11 @@
 {% block content %}
 <div class="page-title">Desafios de Poupança</div>
 <p class="page-subtitle">
-  Escolha um plano atrelado ao seu Objetivo Maior:
-  <strong style="color: var(--neon)">{{ user.objetivo_maior or "defina um objetivo no onboarding" }}</strong>
+  Objetivo: <strong class="neon-text">{{ user.objetivo_maior or "ainda não definido" }}</strong>
 </p>
+<div class="disclaimer">
+  Você pode usar os planos pré-definidos abaixo <strong>ou definir qualquer número de dias</strong> que faça sentido para o seu objetivo — basta selecionar "Dias Personalizados" no final da lista.
+</div>
 
 <div class="card">
   <form method="post" action="/challenges" id="challenge-form">

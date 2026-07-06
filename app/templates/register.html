@@ -10,7 +10,14 @@
     <div class="error-box">{{ error }}</div>
     {% endif %}
 
+    {% if desejo %}
+    <div class="disclaimer disclaimer-tight">
+      Objetivo escolhido: <strong>{{ desejo }}</strong> ✓
+    </div>
+    {% endif %}
+
     <form method="post" action="/register">
+      <input type="hidden" name="desejo" value="{{ desejo or '' }}" />
       <label for="name">Nome</label>
       <input type="text" id="name" name="name" required />
 

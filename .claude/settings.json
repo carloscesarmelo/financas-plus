@@ -4,7 +4,26 @@
       "Bash(python -c ' *)",
       "Bash(rm -f test_admin.txt)",
       "Bash(curl -s -c test_admin.txt -X POST https://financas-plus-production.up.railway.app/register -d 'name=Carlos Admin' -d email=carlosmelo085%40gmail.com -d password=admin123 -D - -o /dev/null -w 'register -> %{http_code}\\\\n')",
-      "Bash(python -m py_compile app/models.py app/gamification.py app/routers/tips_router.py app/main.py)"
+      "Bash(python -m py_compile app/models.py app/gamification.py app/routers/tips_router.py app/main.py)",
+      "Bash(python -m py_compile app/routers/admin_router.py app/routers/tips_router.py app/routers/auth_router.py app/main.py)",
+      "Bash(xargs grep -l \"termos\\\\|privacy\\\\|politica\")",
+      "Bash(xargs grep -l \"smtp\\\\|email\\\\|send\")",
+      "Bash(python -m py_compile app/models.py app/main.py app/routers/auth_router.py app/routers/admin_router.py)",
+      "WebFetch(domain:registro.br)",
+      "Bash(curl -s \"https://rdap.registro.br/domain/financas-plus.com.br\" --max-time 15)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('STATUS:', d.get\\('status',[]\\)\\); print\\('HANDLE:', d.get\\('handle',''\\)\\)\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" \"https://rdap.registro.br/domain/financas-plus.com.br\" --max-time 15)",
+      "Bash(curl -sL -o /tmp/rdap_resp.txt -w \"%{http_code}\" \"https://rdap.registro.br/domain/financas-plus.com.br\" --max-time 15)",
+      "Bash(curl -s -D - -o /dev/null \"https://rdap.registro.br/domain/financas-plus.com.br\" --max-time 15)",
+      "Bash(curl -s --connect-timeout 10 \"https://rdap.registro.br/domain/financas-plus.com.br\" -w \"\\\\nHTTP_CODE:%{http_code}\" --max-time 15)",
+      "Bash(railway domain *)",
+      "Bash(python -m py_compile app/models.py app/seed.py app/main.py app/routers/admin_router.py)",
+      "Bash(curl -s -o /dev/null -w \"status=%{http_code}\\\\n\" https://financasmais.app.br --max-time 15)",
+      "Bash(cd \"/c/Users/CARLOS MELO/financas-plus\" && sed -i 's|financas-plus-production.up.railway.app|financasmais.app.br|g' app/templates/admin_dashboard.html app/templates/base.html app/templates/diagnostico_pdf.html app/templates/termos.html && grep -rn \"financasmais.app.br\" app/templates/ | grep -v \"__pycache__\")",
+      "Bash(python -m py_compile app/main.py app/routers/auth_router.py app/routers/onboarding_router.py app/routers/admin_router.py)"
+    ],
+    "additionalDirectories": [
+      "c:\\c\\Users\\CARLOS MELO\\financas-plus\\app\\templates"
     ]
   }
 }

@@ -67,6 +67,15 @@ a {
   color: var(--neon);
 }
 
+.nav-link-destaque {
+  color: var(--neon) !important;
+  font-weight: 700;
+  border: 1px solid var(--neon-glow);
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--neon-soft);
+}
+
 .nav-pill-free {
   color: var(--danger);
   border-color: var(--danger);
@@ -586,6 +595,22 @@ textarea:focus {
 .hero {
   text-align: center;
   padding: 24px 0 48px;
+}
+
+.hidden {
+  display: none;
+}
+
+.custom-desejo-wrapper {
+  max-width: 820px;
+  margin: 0 auto 16px;
+}
+
+.custom-desejo-input {
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+  border-color: var(--neon-glow);
 }
 
 .quadro-label {
@@ -1166,6 +1191,98 @@ textarea:focus {
 .legal-placeholder {
   color: var(--danger);
   font-weight: 600;
+}
+
+.dash-counters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.dash-counter-card {
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--neon-glow);
+  border-radius: 14px;
+  padding: 16px;
+  text-decoration: none;
+  transition: box-shadow 0.15s ease;
+}
+
+.dash-counter-card:hover {
+  box-shadow: 0 0 20px -4px var(--neon-glow);
+}
+
+.dash-counter-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.dash-counter-title {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.dash-counter-pct {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--neon);
+}
+
+.dash-counter-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+.dash-counter-new {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-elevated);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.dash-counter-new:hover {
+  border-color: var(--neon);
+  color: var(--neon);
+}
+
+.dash-no-challenge {
+  display: block;
+  background: var(--bg-elevated);
+  border: 1px dashed var(--neon-glow);
+  border-radius: 14px;
+  padding: 18px 24px;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.dash-no-challenge:hover {
+  background: var(--neon-soft);
+  color: var(--neon);
+}
+
+.neon-text {
+  color: var(--neon);
+}
+
+.disclaimer-tight {
+  margin-bottom: 0;
 }
 
 .legal-footer {

@@ -23,7 +23,8 @@ def suggest_profile(renda_atual: float, possui_dividas: bool, comportamento: str
 
 @router.get("/onboarding")
 def onboarding_form(request: Request, user: User = Depends(require_user)):
-    return templates.TemplateResponse("onboarding.html", {"request": request, "user": user})
+    desejo = request.session.get("desejo", "")
+    return templates.TemplateResponse("onboarding.html", {"request": request, "user": user, "desejo": desejo})
 
 
 @router.post("/onboarding")
@@ -57,5 +58,6 @@ def onboarding_submit(
     user.onboarding_completed = True
 
     db.commit()
+    request.session.pop("desejo", None)
 
     return RedirectResponse("/dashboard", status_code=303)
