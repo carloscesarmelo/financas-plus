@@ -7,13 +7,35 @@
   <span class="learn-xp-info">+{{ xp_per_content }} XP</span>.
 </p>
 
+<div class="learn-search-bar">
+  <div class="learn-search-input-wrapper">
+    <span class="learn-search-icon">🔍</span>
+    <input type="text" id="learn-search" class="learn-search-input"
+      placeholder="Buscar por título, tipo ou nível..." autocomplete="off" />
+    <button type="button" id="learn-search-clear" class="learn-search-clear hidden">✕</button>
+  </div>
+  <div class="learn-filter-chips">
+    <button type="button" class="learn-chip active" data-filter="">Todos</button>
+    <button type="button" class="learn-chip" data-filter="video">📹 Vídeo</button>
+    <button type="button" class="learn-chip" data-filter="artigo">📄 Artigo</button>
+    <button type="button" class="learn-chip" data-filter="podcast">🎧 Podcast</button>
+    <button type="button" class="learn-chip" data-filter="basico">🟢 Básico</button>
+    <button type="button" class="learn-chip" data-filter="intermediario">🟡 Intermediário</button>
+    <button type="button" class="learn-chip" data-filter="avancado">🔴 Avançado</button>
+  </div>
+</div>
+
+<div id="learn-no-results" class="learn-no-results hidden">
+  Nenhum conteúdo encontrado para "<span id="learn-search-term"></span>".
+</div>
+
 {% if user.is_admin %}
 <a class="btn btn-secondary" href="/admin/learn">+ Adicionar conteúdo (admin)</a>
 {% endif %}
 
 {% for level, contents in by_level.items() %}
 {% set stats = level_stats[level] %}
-<div class="card">
+<div class="card learn-level-section" data-level="{{ level }}">
   <div class="learn-level-header">
     <div>
       <div class="learn-level-title">{{ level_labels.get(level, level) }}</div>
@@ -41,7 +63,10 @@
   {% if contents %}
   {% for content in contents %}
   {% set is_done = content.id in completed_ids %}
-  <div class="list-item learn-item {{ 'learn-item-done' if is_done else '' }}">
+  <div class="list-item learn-item {{ 'learn-item-done' if is_done else '' }}"
+    data-title="{{ content.title | lower }}"
+    data-type="{{ content.content_type }}"
+    data-level="{{ level }}">
     <div class="learn-item-info">
       <span class="tag">{{ content.content_type }}</span>
       {% if not is_done %}
@@ -68,4 +93,65 @@
   {% endif %}
 </div>
 {% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  const searchInput = document.getElementById("learn-search");
+  const clearBtn = document.getElementById("learn-search-clear");
+  const noResults = document.getElementById("learn-no-results");
+  const searchTerm = document.getElementById("learn-search-term");
+  const chips = document.querySelectorAll(".learn-chip");
+  const items = document.querySelectorAll(".learn-item");
+  const sections = document.querySelectorAll(".learn-level-section");
+
+  let activeFilter = "";
+
+  function applyFilters() {
+    const query = searchInput.value.trim().toLowerCase();
+    clearBtn.classList.toggle("hidden", query === "");
+    searchTerm.textContent = query;
+
+    let visibleTotal = 0;
+
+    items.forEach((item) => {
+      const title = item.dataset.title || "";
+      const type = item.dataset.type || "";
+      const level = item.dataset.level || "";
+
+      const matchesSearch = query === "" || title.includes(query) || type.includes(query) || level.includes(query);
+      const matchesFilter = activeFilter === "" || type === activeFilter || level === activeFilter;
+
+      const visible = matchesSearch && matchesFilter;
+      item.classList.toggle("hidden", !visible);
+      if (visible) visibleTotal++;
+    });
+
+    sections.forEach((section) => {
+      const visibleItems = section.querySelectorAll(".learn-item:not(.hidden)");
+      section.classList.toggle("hidden", visibleItems.length === 0);
+    });
+
+    noResults.classList.toggle("hidden", visibleTotal > 0 || query === "");
+  }
+
+  searchInput.addEventListener("input", applyFilters);
+
+  clearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    applyFilters();
+    searchInput.focus();
+  });
+
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      chips.forEach((c) => c.classList.remove("active"));
+      chip.classList.add("active");
+      activeFilter = chip.dataset.filter;
+      applyFilters();
+    });
+  });
+})();
+</script>
 {% endblock %}
